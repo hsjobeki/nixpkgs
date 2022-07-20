@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-5oq6i+PiDl0RIKvKyEGQn/GAIXCKhBKvpY/xU8T6sKw=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "tornado >= 6.0.3, <6.2" "tornado >= 6.0.3"
+  '';
+
   propagatedBuildInputs = [
     click
     cloudpickle
