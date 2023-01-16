@@ -271,6 +271,7 @@ rec {
       name = "bool";
       description = "boolean";
       descriptionClass = "noun";
+      outputType = "Bool";
       check = isBool;
       merge = mergeEqualOption;
     };
@@ -279,6 +280,7 @@ rec {
       name = "int";
       description = "signed integer";
       descriptionClass = "noun";
+      outputType = "Integer";
       check = isInt;
       merge = mergeEqualOption;
     };
@@ -486,6 +488,14 @@ rec {
     listOf = elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
+
+      documentation = {
+        outputType = {
+          type = "List"; # enum of "List" "String" ...
+          children = elemType.documentation.outputType;
+        };
+      };
+
       descriptionClass = "composite";
       check = isList;
       merge = loc: defs:
@@ -510,6 +520,7 @@ rec {
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
         description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
+        outputType = "[ ${optionDescriptionPhrase (class: class == "noun") list} ]";
         emptyValue = { }; # no .value attr, meaning unset
       };
 
