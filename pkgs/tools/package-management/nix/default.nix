@@ -190,6 +190,11 @@ in lib.makeExtensible (self: ({
     version = "2.17.0";
     hash = "sha256-QMYAkdtU+g9HlZKtoJ+AI6TbWzzovKGnPZJHfZdclc8=";
   };
+  patch = common rec {
+    hash = "sha256-5foayRcgn2qMfUPbWE5Y2q9b9taidzQZWTNDFZ3PNlc=";
+    version = "2.18.0pre20230911_6589068";
+    src = fetchFromGitHub { owner = "hsjobeki"; repo = "nix"; rev = "lambda-docstring"; inherit hash; };
+  };
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -209,6 +214,7 @@ in lib.makeExtensible (self: ({
       nix;
 
   stable = self.nix_2_17;
+
 
   unstable = self.stable;
 } // lib.optionalAttrs config.allowAliases {
