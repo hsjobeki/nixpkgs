@@ -1,4 +1,6 @@
-/* String manipulation functions. */
+/**
+  String manipulation functions.
+*/
 { lib }:
 let
 
@@ -39,44 +41,76 @@ rec {
     unsafeDiscardStringContext
     ;
 
-  /* Concatenate a list of strings.
+  /**
+    Concatenate a list of strings.
 
-    Type: concatStrings :: [string] -> string
+    # Example
 
-     Example:
-       concatStrings ["foo" "bar"]
-       => "foobar"
+    ```nix
+    concatStrings ["foo" "bar"]
+    => "foobar"
+    ```
+
+    # Type
+
+    ```
+    concatStrings :: [string] -> string
+    ```
   */
   concatStrings = builtins.concatStringsSep "";
 
-  /* Map a function over a list and concatenate the resulting strings.
+  /**
+    Map a function over a list and concatenate the resulting strings.
 
-    Type: concatMapStrings :: (a -> string) -> [a] -> string
+    # Example
 
-     Example:
-       concatMapStrings (x: "a" + x) ["foo" "bar"]
-       => "afooabar"
+    ```nix
+    concatMapStrings (x: "a" + x) ["foo" "bar"]
+    => "afooabar"
+    ```
+
+    # Type
+
+    ```
+    concatMapStrings :: (a -> string) -> [a] -> string
+    ```
   */
   concatMapStrings = f: list: concatStrings (map f list);
 
-  /* Like `concatMapStrings` except that the f functions also gets the
-     position as a parameter.
+  /**
+    Like `concatMapStrings` except that the f functions also gets the
+    position as a parameter.
 
-     Type: concatImapStrings :: (int -> a -> string) -> [a] -> string
+    # Example
 
-     Example:
-       concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
-       => "1-foo2-bar"
+    ```nix
+    concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
+    => "1-foo2-bar"
+    ```
+
+    # Type
+
+    ```
+    concatImapStrings :: (int -> a -> string) -> [a] -> string
+    ```
   */
   concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
-  /* Place an element between each element of a list
+  /**
+    Place an element between each element of a list
 
-     Type: intersperse :: a -> [a] -> [a]
+    # Example
 
-     Example:
-       intersperse "/" ["usr" "local" "bin"]
-       => ["usr" "/" "local" "/" "bin"].
+    ```nix
+    intersperse "/" ["usr" "local" "bin"]
+    => ["usr" "/" "local" "/" "bin"].
+    ```
+
+    # Type
+
+    ```
+    intersperse :: a -> [a] -> [a]
+    ```
   */
   intersperse =
     # Separator to add between elements
@@ -87,26 +121,42 @@ rec {
     then list
     else tail (lib.concatMap (x: [separator x]) list);
 
-  /* Concatenate a list of strings with a separator between each element
+  /**
+    Concatenate a list of strings with a separator between each element
 
-     Type: concatStringsSep :: string -> [string] -> string
+    # Example
 
-     Example:
-        concatStringsSep "/" ["usr" "local" "bin"]
-        => "usr/local/bin"
+    ```nix
+    concatStringsSep "/" ["usr" "local" "bin"]
+    => "usr/local/bin"
+    ```
+
+    # Type
+
+    ```
+    concatStringsSep :: string -> [string] -> string
+    ```
   */
   concatStringsSep = builtins.concatStringsSep or (separator: list:
     lib.foldl' (x: y: x + y) "" (intersperse separator list));
 
-  /* Maps a function over a list of strings and then concatenates the
-     result with the specified separator interspersed between
-     elements.
+  /**
+    Maps a function over a list of strings and then concatenates the
+    result with the specified separator interspersed between
+    elements.
 
-     Type: concatMapStringsSep :: string -> (a -> string) -> [a] -> string
+    # Example
 
-     Example:
-        concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
-        => "FOO-BAR-BAZ"
+    ```nix
+    concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
+    => "FOO-BAR-BAZ"
+    ```
+
+    # Type
+
+    ```
+    concatMapStringsSep :: string -> (a -> string) -> [a] -> string
+    ```
   */
   concatMapStringsSep =
     # Separator to add between elements
@@ -116,14 +166,22 @@ rec {
     # List of input strings
     list: concatStringsSep sep (map f list);
 
-  /* Same as `concatMapStringsSep`, but the mapping function
-     additionally receives the position of its argument.
+  /**
+    Same as `concatMapStringsSep`, but the mapping function
+    additionally receives the position of its argument.
 
-     Type: concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
+    # Example
 
-     Example:
-       concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
-       => "6-3-2"
+    ```nix
+    concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
+    => "6-3-2"
+    ```
+
+    # Type
+
+    ```
+    concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
+    ```
   */
   concatImapStringsSep =
     # Separator to add between elements
@@ -133,27 +191,43 @@ rec {
     # List of input strings
     list: concatStringsSep sep (lib.imap1 f list);
 
-  /* Concatenate a list of strings, adding a newline at the end of each one.
-     Defined as `concatMapStrings (s: s + "\n")`.
+  /**
+    Concatenate a list of strings, adding a newline at the end of each one.
+    Defined as `concatMapStrings (s: s + "\n")`.
 
-     Type: concatLines :: [string] -> string
+    # Example
 
-     Example:
-       concatLines [ "foo" "bar" ]
-       => "foo\nbar\n"
+    ```nix
+    concatLines [ "foo" "bar" ]
+    => "foo\nbar\n"
+    ```
+
+    # Type
+
+    ```
+    concatLines :: [string] -> string
+    ```
   */
   concatLines = concatMapStrings (s: s + "\n");
 
-  /* Construct a Unix-style, colon-separated search path consisting of
-     the given `subDir` appended to each of the given paths.
+  /**
+    Construct a Unix-style, colon-separated search path consisting of
+    the given `subDir` appended to each of the given paths.
 
-     Type: makeSearchPath :: string -> [string] -> string
+    # Example
 
-     Example:
-       makeSearchPath "bin" ["/root" "/usr" "/usr/local"]
-       => "/root/bin:/usr/bin:/usr/local/bin"
-       makeSearchPath "bin" [""]
-       => "/bin"
+    ```nix
+    makeSearchPath "bin" ["/root" "/usr" "/usr/local"]
+    => "/root/bin:/usr/bin:/usr/local/bin"
+    makeSearchPath "bin" [""]
+    => "/bin"
+    ```
+
+    # Type
+
+    ```
+    makeSearchPath :: string -> [string] -> string
+    ```
   */
   makeSearchPath =
     # Directory name to append
@@ -162,16 +236,24 @@ rec {
     paths:
     concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
 
-  /* Construct a Unix-style search path by appending the given
-     `subDir` to the specified `output` of each of the packages. If no
-     output by the given name is found, fallback to `.out` and then to
-     the default.
+  /**
+    Construct a Unix-style search path by appending the given
+    `subDir` to the specified `output` of each of the packages. If no
+    output by the given name is found, fallback to `.out` and then to
+    the default.
 
-     Type: string -> string -> [package] -> string
+    # Example
 
-     Example:
-       makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+    ```nix
+    makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
+    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+    ```
+
+    # Type
+
+    ```
+    string -> string -> [package] -> string
+    ```
   */
   makeSearchPathOutput =
     # Package output to use
@@ -181,34 +263,50 @@ rec {
     # List of packages
     pkgs: makeSearchPath subDir (map (lib.getOutput output) pkgs);
 
-  /* Construct a library search path (such as RPATH) containing the
-     libraries for a set of packages
+  /**
+    Construct a library search path (such as RPATH) containing the
+    libraries for a set of packages
 
-     Example:
-       makeLibraryPath [ "/usr" "/usr/local" ]
-       => "/usr/lib:/usr/local/lib"
-       pkgs = import <nixpkgs> { }
-       makeLibraryPath [ pkgs.openssl pkgs.zlib ]
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+    # Example
+
+    ```nix
+    makeLibraryPath [ "/usr" "/usr/local" ]
+    => "/usr/lib:/usr/local/lib"
+    pkgs = import <nixpkgs> { }
+    makeLibraryPath [ pkgs.openssl pkgs.zlib ]
+    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+    ```
   */
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
-  /* Construct a binary search path (such as $PATH) containing the
-     binaries for a set of packages.
+  /**
+    Construct a binary search path (such as $PATH) containing the
+    binaries for a set of packages.
 
-     Example:
-       makeBinPath ["/root" "/usr" "/usr/local"]
-       => "/root/bin:/usr/bin:/usr/local/bin"
+    # Example
+
+    ```nix
+    makeBinPath ["/root" "/usr" "/usr/local"]
+    => "/root/bin:/usr/bin:/usr/local/bin"
+    ```
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
-  /* Normalize path, removing extraneous /s
+  /**
+    Normalize path, removing extraneous /s
 
-     Type: normalizePath :: string -> string
+    # Example
 
-     Example:
-       normalizePath "/a//b///c/"
-       => "/a/b/c/"
+    ```nix
+    normalizePath "/a//b///c/"
+    => "/a/b/c/"
+    ```
+
+    # Type
+
+    ```
+    normalizePath :: string -> string
+    ```
   */
   normalizePath = s:
     warnIf
@@ -225,16 +323,24 @@ rec {
           (stringToCharacters s)
       );
 
-  /* Depending on the boolean `cond', return either the given string
-     or the empty string. Useful to concatenate against a bigger string.
+  /**
+    Depending on the boolean `cond', return either the given string
+    or the empty string. Useful to concatenate against a bigger string.
 
-     Type: optionalString :: bool -> string -> string
+    # Example
 
-     Example:
-       optionalString true "some-string"
-       => "some-string"
-       optionalString false "some-string"
-       => ""
+    ```nix
+    optionalString true "some-string"
+    => "some-string"
+    optionalString false "some-string"
+    => ""
+    ```
+
+    # Type
+
+    ```
+    optionalString :: bool -> string -> string
+    ```
   */
   optionalString =
     # Condition
@@ -242,15 +348,23 @@ rec {
     # String to return if condition is true
     string: if cond then string else "";
 
-  /* Determine whether a string has given prefix.
+  /**
+    Determine whether a string has given prefix.
 
-     Type: hasPrefix :: string -> string -> bool
+    # Example
 
-     Example:
-       hasPrefix "foo" "foobar"
-       => true
-       hasPrefix "foo" "barfoo"
-       => false
+    ```nix
+    hasPrefix "foo" "foobar"
+    => true
+    hasPrefix "foo" "barfoo"
+    => false
+    ```
+
+    # Type
+
+    ```
+    hasPrefix :: string -> string -> bool
+    ```
   */
   hasPrefix =
     # Prefix to check for
@@ -269,15 +383,23 @@ rec {
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
       (substring 0 (stringLength pref) str == pref);
 
-  /* Determine whether a string has given suffix.
+  /**
+    Determine whether a string has given suffix.
 
-     Type: hasSuffix :: string -> string -> bool
+    # Example
 
-     Example:
-       hasSuffix "foo" "foobar"
-       => false
-       hasSuffix "foo" "barfoo"
-       => true
+    ```nix
+    hasSuffix "foo" "foobar"
+    => false
+    hasSuffix "foo" "barfoo"
+    => true
+    ```
+
+    # Type
+
+    ```
+    hasSuffix :: string -> string -> bool
+    ```
   */
   hasSuffix =
     # Suffix to check for
@@ -302,19 +424,27 @@ rec {
         && substring (lenContent - lenSuffix) lenContent content == suffix
       );
 
-  /* Determine whether a string contains the given infix
+  /**
+    Determine whether a string contains the given infix
 
-    Type: hasInfix :: string -> string -> bool
+    # Example
 
-    Example:
-      hasInfix "bc" "abcd"
-      => true
-      hasInfix "ab" "abcd"
-      => true
-      hasInfix "cd" "abcd"
-      => true
-      hasInfix "foo" "abcd"
-      => false
+    ```nix
+    hasInfix "bc" "abcd"
+    => true
+    hasInfix "ab" "abcd"
+    => true
+    hasInfix "cd" "abcd"
+    => true
+    hasInfix "foo" "abcd"
+    => false
+    ```
+
+    # Type
+
+    ```
+    hasInfix :: string -> string -> bool
+    ```
   */
   hasInfix = infix: content:
     # Before 23.05, paths would be copied to the store before converting them
@@ -328,35 +458,51 @@ rec {
             This behavior is deprecated and will throw an error in the future.''
       (builtins.match ".*${escapeRegex infix}.*" "${content}" != null);
 
-  /* Convert a string to a list of characters (i.e. singleton strings).
-     This allows you to, e.g., map a function over each character.  However,
-     note that this will likely be horribly inefficient; Nix is not a
-     general purpose programming language. Complex string manipulations
-     should, if appropriate, be done in a derivation.
-     Also note that Nix treats strings as a list of bytes and thus doesn't
-     handle unicode.
+  /**
+    Convert a string to a list of characters (i.e. singleton strings).
+    This allows you to, e.g., map a function over each character.  However,
+    note that this will likely be horribly inefficient; Nix is not a
+    general purpose programming language. Complex string manipulations
+    should, if appropriate, be done in a derivation.
+    Also note that Nix treats strings as a list of bytes and thus doesn't
+    handle unicode.
 
-     Type: stringToCharacters :: string -> [string]
+    # Example
 
-     Example:
-       stringToCharacters ""
-       => [ ]
-       stringToCharacters "abc"
-       => [ "a" "b" "c" ]
-       stringToCharacters "🦄"
-       => [ "�" "�" "�" "�" ]
+    ```nix
+    stringToCharacters ""
+    => [ ]
+    stringToCharacters "abc"
+    => [ "a" "b" "c" ]
+    stringToCharacters "🦄"
+    => [ "�" "�" "�" "�" ]
+    ```
+
+    # Type
+
+    ```
+    stringToCharacters :: string -> [string]
+    ```
   */
   stringToCharacters = s:
     genList (p: substring p 1 s) (stringLength s);
 
-  /* Manipulate a string character by character and replace them by
-     strings before concatenating the results.
+  /**
+    Manipulate a string character by character and replace them by
+    strings before concatenating the results.
 
-     Type: stringAsChars :: (string -> string) -> string -> string
+    # Example
 
-     Example:
-       stringAsChars (x: if x == "a" then "i" else x) "nax"
-       => "nix"
+    ```nix
+    stringAsChars (x: if x == "a" then "i" else x) "nax"
+    => "nix"
+    ```
+
+    # Type
+
+    ```
+    stringAsChars :: (string -> string) -> string -> string
+    ```
   */
   stringAsChars =
     # Function to map over each individual character
@@ -366,51 +512,81 @@ rec {
       map f (stringToCharacters s)
     );
 
-  /* Convert char to ascii value, must be in printable range
+  /**
+    Convert char to ascii value, must be in printable range
 
-     Type: charToInt :: string -> int
+    # Example
 
-     Example:
-       charToInt "A"
-       => 65
-       charToInt "("
-       => 40
+    ```nix
+    charToInt "A"
+    => 65
+    charToInt "("
+    => 40
+    ```
 
+    # Type
+
+    ```
+    charToInt :: string -> int
+    ```
   */
   charToInt = c: builtins.getAttr c asciiTable;
 
-  /* Escape occurrence of the elements of `list` in `string` by
-     prefixing it with a backslash.
+  /**
+    Escape occurrence of the elements of `list` in `string` by
+    prefixing it with a backslash.
 
-     Type: escape :: [string] -> string -> string
+    # Example
 
-     Example:
-       escape ["(" ")"] "(foo)"
-       => "\\(foo\\)"
+    ```nix
+    escape ["(" ")"] "(foo)"
+    => "\\(foo\\)"
+    ```
+
+    # Type
+
+    ```
+    escape :: [string] -> string -> string
+    ```
   */
   escape = list: replaceStrings list (map (c: "\\${c}") list);
 
-  /* Escape occurrence of the element of `list` in `string` by
-     converting to its ASCII value and prefixing it with \\x.
-     Only works for printable ascii characters.
+  /**
+    Escape occurrence of the element of `list` in `string` by
+    converting to its ASCII value and prefixing it with \\x.
+    Only works for printable ascii characters.
 
-     Type: escapeC = [string] -> string -> string
+    # Example
 
-     Example:
-       escapeC [" "] "foo bar"
-       => "foo\\x20bar"
+    ```nix
+    escapeC [" "] "foo bar"
+    => "foo\\x20bar"
+    ```
 
+    # Type
+
+    ```
+    escapeC = [string] -> string -> string
+    ```
   */
   escapeC = list: replaceStrings list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
 
-  /* Escape the string so it can be safely placed inside a URL
-     query.
+  /**
+    Escape the string so it can be safely placed inside a URL
+    query.
 
-     Type: escapeURL :: string -> string
+    # Example
 
-     Example:
-       escapeURL "foo/bar baz"
-       => "foo%2Fbar%20baz"
+    ```nix
+    escapeURL "foo/bar baz"
+    => "foo%2Fbar%20baz"
+    ```
+
+    # Type
+
+    ```
+    escapeURL :: string -> string
+    ```
   */
   escapeURL = let
     unreserved = [ "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "-" "_" "." "~" ];
@@ -418,55 +594,87 @@ rec {
   in
     replaceStrings (builtins.attrNames toEscape) (lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape);
 
-  /* Quote string to be used safely within the Bourne shell.
+  /**
+    Quote string to be used safely within the Bourne shell.
 
-     Type: escapeShellArg :: string -> string
+    # Example
 
-     Example:
-       escapeShellArg "esc'ape\nme"
-       => "'esc'\\''ape\nme'"
+    ```nix
+    escapeShellArg "esc'ape\nme"
+    => "'esc'\\''ape\nme'"
+    ```
+
+    # Type
+
+    ```
+    escapeShellArg :: string -> string
+    ```
   */
   escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
 
-  /* Quote all arguments to be safely passed to the Bourne shell.
+  /**
+    Quote all arguments to be safely passed to the Bourne shell.
 
-     Type: escapeShellArgs :: [string] -> string
+    # Example
 
-     Example:
-       escapeShellArgs ["one" "two three" "four'five"]
-       => "'one' 'two three' 'four'\\''five'"
+    ```nix
+    escapeShellArgs ["one" "two three" "four'five"]
+    => "'one' 'two three' 'four'\\''five'"
+    ```
+
+    # Type
+
+    ```
+    escapeShellArgs :: [string] -> string
+    ```
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
-  /* Test whether the given name is a valid POSIX shell variable name.
+  /**
+    Test whether the given name is a valid POSIX shell variable name.
 
-     Type: string -> bool
+    # Example
 
-     Example:
-       isValidPosixName "foo_bar000"
-       => true
-       isValidPosixName "0-bad.jpg"
-       => false
+    ```nix
+    isValidPosixName "foo_bar000"
+    => true
+    isValidPosixName "0-bad.jpg"
+    => false
+    ```
+
+    # Type
+
+    ```
+    string -> bool
+    ```
   */
   isValidPosixName = name: match "[a-zA-Z_][a-zA-Z0-9_]*" name != null;
 
-  /* Translate a Nix value into a shell variable declaration, with proper escaping.
+  /**
+    Translate a Nix value into a shell variable declaration, with proper escaping.
+    
+    The value can be a string (mapped to a regular variable), a list of strings
+    (mapped to a Bash-style array) or an attribute set of strings (mapped to a
+    Bash-style associative array). Note that "string" includes string-coercible
+    values like paths or derivations.
+    
+    Strings are translated into POSIX sh-compatible code; lists and attribute sets
+    assume a shell that understands Bash syntax (e.g. Bash or ZSH).
 
-     The value can be a string (mapped to a regular variable), a list of strings
-     (mapped to a Bash-style array) or an attribute set of strings (mapped to a
-     Bash-style associative array). Note that "string" includes string-coercible
-     values like paths or derivations.
+    # Example
 
-     Strings are translated into POSIX sh-compatible code; lists and attribute sets
-     assume a shell that understands Bash syntax (e.g. Bash or ZSH).
+    ```nix
+    ''
+      ${toShellVar "foo" "some string"}
+      [[ "$foo" == "some string" ]]
+    ''
+    ```
 
-     Type: string -> (string | listOf string | attrsOf string) -> string
+    # Type
 
-     Example:
-       ''
-         ${toShellVar "foo" "some string"}
-         [[ "$foo" == "some string" ]]
-       ''
+    ```
+    string -> (string | listOf string | attrsOf string) -> string
+    ```
   */
   toShellVar = name: value:
     lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
@@ -482,65 +690,105 @@ rec {
       "${name}=${escapeShellArg value}"
     );
 
-  /* Translate an attribute set into corresponding shell variable declarations
-     using `toShellVar`.
+  /**
+    Translate an attribute set into corresponding shell variable declarations
+    using `toShellVar`.
 
-     Type: attrsOf (string | listOf string | attrsOf string) -> string
+    # Example
 
-     Example:
-       let
-         foo = "value";
-         bar = foo;
-       in ''
-         ${toShellVars { inherit foo bar; }}
-         [[ "$foo" == "$bar" ]]
-       ''
+    ```nix
+    let
+      foo = "value";
+      bar = foo;
+    in ''
+      ${toShellVars { inherit foo bar; }}
+      [[ "$foo" == "$bar" ]]
+    ''
+    ```
+
+    # Type
+
+    ```
+    attrsOf (string | listOf string | attrsOf string) -> string
+    ```
   */
   toShellVars = vars: concatStringsSep "\n" (lib.mapAttrsToList toShellVar vars);
 
-  /* Turn a string into a Nix expression representing that string
+  /**
+    Turn a string into a Nix expression representing that string
 
-     Type: string -> string
+    # Example
 
-     Example:
-       escapeNixString "hello\${}\n"
-       => "\"hello\\\${}\\n\""
+    ```nix
+    escapeNixString "hello\${}\n"
+    => "\"hello\\\${}\\n\""
+    ```
+
+    # Type
+
+    ```
+    string -> string
+    ```
   */
   escapeNixString = s: escape ["$"] (toJSON s);
 
-  /* Turn a string into an exact regular expression
+  /**
+    Turn a string into an exact regular expression
 
-     Type: string -> string
+    # Example
 
-     Example:
-       escapeRegex "[^a-z]*"
-       => "\\[\\^a-z]\\*"
+    ```nix
+    escapeRegex "[^a-z]*"
+    => "\\[\\^a-z]\\*"
+    ```
+
+    # Type
+
+    ```
+    string -> string
+    ```
   */
   escapeRegex = escape (stringToCharacters "\\[{()^$?*+|.");
 
-  /* Quotes a string if it can't be used as an identifier directly.
+  /**
+    Quotes a string if it can't be used as an identifier directly.
 
-     Type: string -> string
+    # Example
 
-     Example:
-       escapeNixIdentifier "hello"
-       => "hello"
-       escapeNixIdentifier "0abc"
-       => "\"0abc\""
+    ```nix
+    escapeNixIdentifier "hello"
+    => "hello"
+    escapeNixIdentifier "0abc"
+    => "\"0abc\""
+    ```
+
+    # Type
+
+    ```
+    string -> string
+    ```
   */
   escapeNixIdentifier = s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
     if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
     then s else escapeNixString s;
 
-  /* Escapes a string such that it is safe to include verbatim in an XML
-     document.
+  /**
+    Escapes a string such that it is safe to include verbatim in an XML
+    document.
 
-     Type: string -> string
+    # Example
 
-     Example:
-       escapeXML ''"test" 'test' < & >''
-       => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
+    ```nix
+    escapeXML ''"test" 'test' < & >''
+    => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
+    ```
+
+    # Type
+
+    ```
+    string -> string
+    ```
   */
   escapeXML = builtins.replaceStrings
     ["\"" "'" "<" ">" "&"]
@@ -553,49 +801,73 @@ rec {
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-  /* Converts an ASCII string to lower-case.
+  /**
+    Converts an ASCII string to lower-case.
 
-     Type: toLower :: string -> string
+    # Example
 
-     Example:
-       toLower "HOME"
-       => "home"
+    ```nix
+    toLower "HOME"
+    => "home"
+    ```
+
+    # Type
+
+    ```
+    toLower :: string -> string
+    ```
   */
   toLower = replaceStrings upperChars lowerChars;
 
-  /* Converts an ASCII string to upper-case.
+  /**
+    Converts an ASCII string to upper-case.
 
-     Type: toUpper :: string -> string
+    # Example
 
-     Example:
-       toUpper "home"
-       => "HOME"
+    ```nix
+    toUpper "home"
+    => "HOME"
+    ```
+
+    # Type
+
+    ```
+    toUpper :: string -> string
+    ```
   */
   toUpper = replaceStrings lowerChars upperChars;
 
-  /* Appends string context from another string.  This is an implementation
-     detail of Nix and should be used carefully.
+  /**
+    Appends string context from another string.  This is an implementation
+    detail of Nix and should be used carefully.
+    
+    Strings in Nix carry an invisible `context` which is a list of strings
+    representing store paths.  If the string is later used in a derivation
+    attribute, the derivation will properly populate the inputDrvs and
+    inputSrcs.
 
-     Strings in Nix carry an invisible `context` which is a list of strings
-     representing store paths.  If the string is later used in a derivation
-     attribute, the derivation will properly populate the inputDrvs and
-     inputSrcs.
+    # Example
 
-     Example:
-       pkgs = import <nixpkgs> { };
-       addContextFrom pkgs.coreutils "bar"
-       => "bar"
+    ```nix
+    pkgs = import <nixpkgs> { };
+    addContextFrom pkgs.coreutils "bar"
+    => "bar"
+    ```
   */
   addContextFrom = a: b: substring 0 0 a + b;
 
-  /* Cut a string with a separator and produces a list of strings which
-     were separated by this separator.
+  /**
+    Cut a string with a separator and produces a list of strings which
+    were separated by this separator.
 
-     Example:
-       splitString "." "foo.bar.baz"
-       => [ "foo" "bar" "baz" ]
-       splitString "/" "/usr/local/bin"
-       => [ "" "usr" "local" "bin" ]
+    # Example
+
+    ```nix
+    splitString "." "foo.bar.baz"
+    => [ "foo" "bar" "baz" ]
+    splitString "/" "/usr/local/bin"
+    => [ "" "usr" "local" "bin" ]
+    ```
   */
   splitString = sep: s:
     let
@@ -603,15 +875,23 @@ rec {
     in
       map (addContextFrom s) splits;
 
-  /* Return a string without the specified prefix, if the prefix matches.
+  /**
+    Return a string without the specified prefix, if the prefix matches.
 
-     Type: string -> string -> string
+    # Example
 
-     Example:
-       removePrefix "foo." "foo.bar.baz"
-       => "bar.baz"
-       removePrefix "xxx" "foo.bar.baz"
-       => "foo.bar.baz"
+    ```nix
+    removePrefix "foo." "foo.bar.baz"
+    => "bar.baz"
+    removePrefix "xxx" "foo.bar.baz"
+    => "foo.bar.baz"
+    ```
+
+    # Type
+
+    ```
+    string -> string -> string
+    ```
   */
   removePrefix =
     # Prefix to remove if it matches
@@ -636,15 +916,23 @@ rec {
       else
         str);
 
-  /* Return a string without the specified suffix, if the suffix matches.
+  /**
+    Return a string without the specified suffix, if the suffix matches.
 
-     Type: string -> string -> string
+    # Example
 
-     Example:
-       removeSuffix "front" "homefront"
-       => "home"
-       removeSuffix "xxx" "homefront"
-       => "homefront"
+    ```nix
+    removeSuffix "front" "homefront"
+    => "home"
+    removeSuffix "xxx" "homefront"
+    => "homefront"
+    ```
+
+    # Type
+
+    ```
+    string -> string -> string
+    ```
   */
   removeSuffix =
     # Suffix to remove if it matches
@@ -669,37 +957,49 @@ rec {
       else
         str);
 
-  /* Return true if string v1 denotes a version older than v2.
+  /**
+    Return true if string v1 denotes a version older than v2.
 
-     Example:
-       versionOlder "1.1" "1.2"
-       => true
-       versionOlder "1.1" "1.1"
-       => false
+    # Example
+
+    ```nix
+    versionOlder "1.1" "1.2"
+    => true
+    versionOlder "1.1" "1.1"
+    => false
+    ```
   */
   versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
-  /* Return true if string v1 denotes a version equal to or newer than v2.
+  /**
+    Return true if string v1 denotes a version equal to or newer than v2.
 
-     Example:
-       versionAtLeast "1.1" "1.0"
-       => true
-       versionAtLeast "1.1" "1.1"
-       => true
-       versionAtLeast "1.1" "1.2"
-       => false
+    # Example
+
+    ```nix
+    versionAtLeast "1.1" "1.0"
+    => true
+    versionAtLeast "1.1" "1.1"
+    => true
+    versionAtLeast "1.1" "1.2"
+    => false
+    ```
   */
   versionAtLeast = v1: v2: !versionOlder v1 v2;
 
-  /* This function takes an argument that's either a derivation or a
-     derivation's "name" attribute and extracts the name part from that
-     argument.
+  /**
+    This function takes an argument that's either a derivation or a
+    derivation's "name" attribute and extracts the name part from that
+    argument.
 
-     Example:
-       getName "youtube-dl-2016.01.01"
-       => "youtube-dl"
-       getName pkgs.youtube-dl
-       => "youtube-dl"
+    # Example
+
+    ```nix
+    getName "youtube-dl-2016.01.01"
+    => "youtube-dl"
+    getName pkgs.youtube-dl
+    => "youtube-dl"
+    ```
   */
   getName = x:
    let
@@ -708,15 +1008,19 @@ rec {
       then parse x
       else x.pname or (parse x.name);
 
-  /* This function takes an argument that's either a derivation or a
-     derivation's "name" attribute and extracts the version part from that
-     argument.
+  /**
+    This function takes an argument that's either a derivation or a
+    derivation's "name" attribute and extracts the version part from that
+    argument.
 
-     Example:
-       getVersion "youtube-dl-2016.01.01"
-       => "2016.01.01"
-       getVersion pkgs.youtube-dl
-       => "2016.01.01"
+    # Example
+
+    ```nix
+    getVersion "youtube-dl-2016.01.01"
+    => "2016.01.01"
+    getVersion pkgs.youtube-dl
+    => "2016.01.01"
+    ```
   */
   getVersion = x:
    let
@@ -725,14 +1029,18 @@ rec {
       then parse x
       else x.version or (parse x.name);
 
-  /* Extract name with version from URL. Ask for separator which is
-     supposed to start extension.
+  /**
+    Extract name with version from URL. Ask for separator which is
+    supposed to start extension.
 
-     Example:
-       nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "-"
-       => "nix"
-       nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "_"
-       => "nix-1.7-x86"
+    # Example
+
+    ```nix
+    nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "-"
+    => "nix"
+    nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "_"
+    => "nix-1.7-x86"
+    ```
   */
   nameFromURL = url: sep:
     let
@@ -741,120 +1049,168 @@ rec {
       name = head (splitString sep filename);
     in assert name != filename; name;
 
-  /* Create a -D<feature>=<value> string that can be passed to typical Meson
-     invocations.
+  /**
+    Create a -D<feature>=<value> string that can be passed to typical Meson
+    invocations.
 
-    Type: mesonOption :: string -> string -> string
+    # Example
 
-     @param feature The feature to be set
-     @param value The desired value
+    ```nix
+    mesonOption "engine" "opengl"
+    => "-Dengine=opengl"
+    ```
 
-     Example:
-       mesonOption "engine" "opengl"
-       => "-Dengine=opengl"
+    # Type
+
+    ```
+    mesonOption :: string -> string -> string
+    
+    @param feature The feature to be set
+    @param value The desired value
+    ```
   */
   mesonOption = feature: value:
     assert (lib.isString feature);
     assert (lib.isString value);
     "-D${feature}=${value}";
 
-  /* Create a -D<condition>={true,false} string that can be passed to typical
-     Meson invocations.
+  /**
+    Create a -D<condition>={true,false} string that can be passed to typical
+    Meson invocations.
 
-    Type: mesonBool :: string -> bool -> string
+    # Example
 
-     @param condition The condition to be made true or false
-     @param flag The controlling flag of the condition
+    ```nix
+    mesonBool "hardened" true
+    => "-Dhardened=true"
+    mesonBool "static" false
+    => "-Dstatic=false"
+    ```
 
-     Example:
-       mesonBool "hardened" true
-       => "-Dhardened=true"
-       mesonBool "static" false
-       => "-Dstatic=false"
+    # Type
+
+    ```
+    mesonBool :: string -> bool -> string
+    
+    @param condition The condition to be made true or false
+    @param flag The controlling flag of the condition
+    ```
   */
   mesonBool = condition: flag:
     assert (lib.isString condition);
     assert (lib.isBool flag);
     mesonOption condition (lib.boolToString flag);
 
-  /* Create a -D<feature>={enabled,disabled} string that can be passed to
-     typical Meson invocations.
+  /**
+    Create a -D<feature>={enabled,disabled} string that can be passed to
+    typical Meson invocations.
 
-    Type: mesonEnable :: string -> bool -> string
+    # Example
 
-     @param feature The feature to be enabled or disabled
-     @param flag The controlling flag
+    ```nix
+    mesonEnable "docs" true
+    => "-Ddocs=enabled"
+    mesonEnable "savage" false
+    => "-Dsavage=disabled"
+    ```
 
-     Example:
-       mesonEnable "docs" true
-       => "-Ddocs=enabled"
-       mesonEnable "savage" false
-       => "-Dsavage=disabled"
+    # Type
+
+    ```
+    mesonEnable :: string -> bool -> string
+    
+    @param feature The feature to be enabled or disabled
+    @param flag The controlling flag
+    ```
   */
   mesonEnable = feature: flag:
     assert (lib.isString feature);
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
-  /* Create an --{enable,disable}-<feat> string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{enable,disable}-<feat> string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       enableFeature true "shared"
-       => "--enable-shared"
-       enableFeature false "shared"
-       => "--disable-shared"
+    # Example
+
+    ```nix
+    enableFeature true "shared"
+    => "--enable-shared"
+    enableFeature false "shared"
+    => "--disable-shared"
+    ```
   */
   enableFeature = enable: feat:
     assert isString feat; # e.g. passing openssl instead of "openssl"
     "--${if enable then "enable" else "disable"}-${feat}";
 
-  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       enableFeatureAs true "shared" "foo"
-       => "--enable-shared=foo"
-       enableFeatureAs false "shared" (throw "ignored")
-       => "--disable-shared"
+    # Example
+
+    ```nix
+    enableFeatureAs true "shared" "foo"
+    => "--enable-shared=foo"
+    enableFeatureAs false "shared" (throw "ignored")
+    => "--disable-shared"
+    ```
   */
   enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
 
-  /* Create an --{with,without}-<feat> string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{with,without}-<feat> string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       withFeature true "shared"
-       => "--with-shared"
-       withFeature false "shared"
-       => "--without-shared"
+    # Example
+
+    ```nix
+    withFeature true "shared"
+    => "--with-shared"
+    withFeature false "shared"
+    => "--without-shared"
+    ```
   */
   withFeature = with_: feat:
     assert isString feat; # e.g. passing openssl instead of "openssl"
     "--${if with_ then "with" else "without"}-${feat}";
 
-  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       withFeatureAs true "shared" "foo"
-       => "--with-shared=foo"
-       withFeatureAs false "shared" (throw "ignored")
-       => "--without-shared"
+    # Example
+
+    ```nix
+    withFeatureAs true "shared" "foo"
+    => "--with-shared=foo"
+    withFeatureAs false "shared" (throw "ignored")
+    => "--without-shared"
+    ```
   */
   withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
 
-  /* Create a fixed width string with additional prefix to match
-     required width.
+  /**
+    Create a fixed width string with additional prefix to match
+    required width.
+    
+    This function will fail if the input string is longer than the
+    requested length.
 
-     This function will fail if the input string is longer than the
-     requested length.
+    # Example
 
-     Type: fixedWidthString :: int -> string -> string -> string
+    ```nix
+    fixedWidthString 5 "0" (toString 15)
+    => "00015"
+    ```
 
-     Example:
-       fixedWidthString 5 "0" (toString 15)
-       => "00015"
+    # Type
+
+    ```
+    fixedWidthString :: int -> string -> string -> string
+    ```
   */
   fixedWidthString = width: filler: str:
     let
@@ -867,23 +1223,31 @@ rec {
             toString strw})";
       if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
-  /* Format a number adding leading zeroes up to fixed width.
+  /**
+    Format a number adding leading zeroes up to fixed width.
 
-     Example:
-       fixedWidthNumber 5 15
-       => "00015"
+    # Example
+
+    ```nix
+    fixedWidthNumber 5 15
+    => "00015"
+    ```
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
-  /* Convert a float to a string, but emit a warning when precision is lost
-     during the conversion
+  /**
+    Convert a float to a string, but emit a warning when precision is lost
+    during the conversion
 
-     Example:
-       floatToString 0.000001
-       => "0.000001"
-       floatToString 0.0000001
-       => trace: warning: Imprecise conversion from float to string 0.000000
-          "0.000000"
+    # Example
+
+    ```nix
+    floatToString 0.000001
+    => "0.000001"
+    floatToString 0.0000001
+    => trace: warning: Imprecise conversion from float to string 0.000000
+       "0.000000"
+    ```
   */
   floatToString = float: let
     result = toString float;
@@ -891,45 +1255,53 @@ rec {
   in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
     result;
 
-  /* Soft-deprecated function. While the original implementation is available as
-     isConvertibleWithToString, consider using isStringLike instead, if suitable. */
+  /**
+    Soft-deprecated function. While the original implementation is available as
+    isConvertibleWithToString, consider using isStringLike instead, if suitable.
+  */
   isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
     "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
     isConvertibleWithToString;
 
-  /* Check whether a list or other value can be passed to toString.
-
-     Many types of value are coercible to string this way, including int, float,
-     null, bool, list of similarly coercible values.
+  /**
+    Check whether a list or other value can be passed to toString.
+    
+    Many types of value are coercible to string this way, including int, float,
+    null, bool, list of similarly coercible values.
   */
   isConvertibleWithToString = x:
     isStringLike x ||
     elem (typeOf x) [ "null" "int" "float" "bool" ] ||
     (isList x && lib.all isConvertibleWithToString x);
 
-  /* Check whether a value can be coerced to a string.
-     The value must be a string, path, or attribute set.
-
-     String-like values can be used without explicit conversion in
-     string interpolations and in most functions that expect a string.
-   */
+  /**
+    Check whether a value can be coerced to a string.
+    The value must be a string, path, or attribute set.
+    
+    String-like values can be used without explicit conversion in
+    string interpolations and in most functions that expect a string.
+  */
   isStringLike = x:
     isString x ||
     isPath x ||
     x ? outPath ||
     x ? __toString;
 
-  /* Check whether a value is a store path.
+  /**
+    Check whether a value is a store path.
 
-     Example:
-       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
-       => false
-       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
-       => true
-       isStorePath pkgs.python
-       => true
-       isStorePath [] || isStorePath 42 || isStorePath {} || …
-       => false
+    # Example
+
+    ```nix
+    isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
+    => false
+    isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
+    => true
+    isStorePath pkgs.python
+    => true
+    isStorePath [] || isStorePath 42 || isStorePath {} || …
+    => false
+    ```
   */
   isStorePath = x:
     if isStringLike x then
@@ -939,27 +1311,34 @@ rec {
     else
       false;
 
-  /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
-  ambiguity between zero-padded and octal numbers. See toIntBase10.
+  /**
+    Parse a string as an int. Does not support parsing of integers with preceding zero due to
+    ambiguity between zero-padded and octal numbers. See toIntBase10.
 
-     Type: string -> int
+    # Example
 
-     Example:
+    ```nix
+    toInt "1337"
+               => 1337
+    
+               toInt "-4"
+               => -4
+    
+               toInt " 123 "
+               => 123
+    
+               toInt "00024"
+               => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
+    
+               toInt "3.14"
+               => error: floating point JSON numbers are not supported
+    ```
 
-       toInt "1337"
-       => 1337
+    # Type
 
-       toInt "-4"
-       => -4
-
-       toInt " 123 "
-       => 123
-
-       toInt "00024"
-       => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
-
-       toInt "3.14"
-       => error: floating point JSON numbers are not supported
+    ```
+    string -> int
+    ```
   */
   toInt = str:
     let
@@ -992,25 +1371,33 @@ rec {
       else parsedInput;
 
 
-  /* Parse a string as a base 10 int. This supports parsing of zero-padded integers.
+  /**
+    Parse a string as a base 10 int. This supports parsing of zero-padded integers.
 
-     Type: string -> int
+    # Example
 
-     Example:
-       toIntBase10 "1337"
-       => 1337
+    ```nix
+    toIntBase10 "1337"
+               => 1337
+    
+               toIntBase10 "-4"
+               => -4
+    
+               toIntBase10 " 123 "
+               => 123
+    
+               toIntBase10 "00024"
+               => 24
+    
+               toIntBase10 "3.14"
+               => error: floating point JSON numbers are not supported
+    ```
 
-       toIntBase10 "-4"
-       => -4
+    # Type
 
-       toIntBase10 " 123 "
-       => 123
-
-       toIntBase10 "00024"
-       => 24
-
-       toIntBase10 "3.14"
-       => error: floating point JSON numbers are not supported
+    ```
+    string -> int
+    ```
   */
   toIntBase10 = str:
     let
@@ -1040,20 +1427,24 @@ rec {
       # Return result.
       else parsedInput;
 
-  /* Read a list of paths from `file`, relative to the `rootPath`.
-     Lines beginning with `#` are treated as comments and ignored.
-     Whitespace is significant.
+  /**
+    Read a list of paths from `file`, relative to the `rootPath`.
+    Lines beginning with `#` are treated as comments and ignored.
+    Whitespace is significant.
+    
+    NOTE: This function is not performant and should be avoided.
 
-     NOTE: This function is not performant and should be avoided.
+    # Example
 
-     Example:
-       readPathsFromFile /prefix
-         ./pkgs/development/libraries/qt-5/5.4/qtbase/series
-       => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
-            "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
-            "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
-            "/prefix/nix-profiles-library-paths.patch"
-            "/prefix/compose-search-path.patch" ]
+    ```nix
+    readPathsFromFile /prefix
+      ./pkgs/development/libraries/qt-5/5.4/qtbase/series
+    => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
+         "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
+         "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
+         "/prefix/nix-profiles-library-paths.patch"
+         "/prefix/compose-search-path.patch" ]
+    ```
   */
   readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
     (rootPath: file:
@@ -1065,30 +1456,46 @@ rec {
       in
         absolutePaths);
 
-  /* Read the contents of a file removing the trailing \n
+  /**
+    Read the contents of a file removing the trailing \n
 
-     Type: fileContents :: path -> string
+    # Example
 
-     Example:
-       $ echo "1.0" > ./version
+    ```nix
+    $ echo "1.0" > ./version
+    
+               fileContents ./version
+               => "1.0"
+    ```
 
-       fileContents ./version
-       => "1.0"
+    # Type
+
+    ```
+    fileContents :: path -> string
+    ```
   */
   fileContents = file: removeSuffix "\n" (readFile file);
 
 
-  /* Creates a valid derivation name from a potentially invalid one.
+  /**
+    Creates a valid derivation name from a potentially invalid one.
 
-     Type: sanitizeDerivationName :: String -> String
+    # Example
 
-     Example:
-       sanitizeDerivationName "../hello.bar # foo"
-       => "-hello.bar-foo"
-       sanitizeDerivationName ""
-       => "unknown"
-       sanitizeDerivationName pkgs.hello
-       => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+    ```nix
+    sanitizeDerivationName "../hello.bar # foo"
+    => "-hello.bar-foo"
+    sanitizeDerivationName ""
+    => "unknown"
+    sanitizeDerivationName pkgs.hello
+    => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+    ```
+
+    # Type
+
+    ```
+    sanitizeDerivationName :: String -> String
+    ```
   */
   sanitizeDerivationName =
   let okRegex = match "[[:alnum:]+_?=-][[:alnum:]+._?=-]*";
@@ -1115,19 +1522,27 @@ rec {
     (x: if stringLength x == 0 then "unknown" else x)
   ];
 
-  /* Computes the Levenshtein distance between two strings.
-     Complexity O(n*m) where n and m are the lengths of the strings.
-     Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
+  /**
+    Computes the Levenshtein distance between two strings.
+    Complexity O(n*m) where n and m are the lengths of the strings.
+    Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
 
-     Type: levenshtein :: string -> string -> int
+    # Example
 
-     Example:
-       levenshtein "foo" "foo"
-       => 0
-       levenshtein "book" "hook"
-       => 1
-       levenshtein "hello" "Heyo"
-       => 3
+    ```nix
+    levenshtein "foo" "foo"
+    => 0
+    levenshtein "book" "hook"
+    => 1
+    levenshtein "hello" "Heyo"
+    => 3
+    ```
+
+    # Type
+
+    ```
+    levenshtein :: string -> string -> int
+    ```
   */
   levenshtein = a: b: let
     # Two dimensional array with dimensions (stringLength a + 1, stringLength b + 1)
@@ -1148,7 +1563,8 @@ rec {
         ( d (i - 1) (j - 1) + c );
   in d (stringLength a) (stringLength b);
 
-  /* Returns the length of the prefix common to both strings.
+  /**
+    Returns the length of the prefix common to both strings.
   */
   commonPrefixLength = a: b:
     let
@@ -1156,7 +1572,8 @@ rec {
       go = i: if i >= m then m else if substring i 1 a == substring i 1 b then go (i + 1) else i;
     in go 0;
 
-  /* Returns the length of the suffix common to both strings.
+  /**
+    Returns the length of the suffix common to both strings.
   */
   commonSuffixLength = a: b:
     let
@@ -1164,23 +1581,30 @@ rec {
       go = i: if i >= m then m else if substring (stringLength a - i - 1) 1 a == substring (stringLength b - i - 1) 1 b then go (i + 1) else i;
     in go 0;
 
-  /* Returns whether the levenshtein distance between two strings is at most some value
-     Complexity is O(min(n,m)) for k <= 2 and O(n*m) otherwise
+  /**
+    Returns whether the levenshtein distance between two strings is at most some value
+    Complexity is O(min(n,m)) for k <= 2 and O(n*m) otherwise
 
-     Type: levenshteinAtMost :: int -> string -> string -> bool
+    # Example
 
-     Example:
-       levenshteinAtMost 0 "foo" "foo"
-       => true
-       levenshteinAtMost 1 "foo" "boa"
-       => false
-       levenshteinAtMost 2 "foo" "boa"
-       => true
-       levenshteinAtMost 2 "This is a sentence" "this is a sentense."
-       => false
-       levenshteinAtMost 3 "This is a sentence" "this is a sentense."
-       => true
+    ```nix
+    levenshteinAtMost 0 "foo" "foo"
+    => true
+    levenshteinAtMost 1 "foo" "boa"
+    => false
+    levenshteinAtMost 2 "foo" "boa"
+    => true
+    levenshteinAtMost 2 "This is a sentence" "this is a sentense."
+    => false
+    levenshteinAtMost 3 "This is a sentence" "this is a sentense."
+    => true
+    ```
 
+    # Type
+
+    ```
+    levenshteinAtMost :: int -> string -> string -> bool
+    ```
   */
   levenshteinAtMost = let
     infixDifferAtMost1 = x: y: stringLength x <= 1 && stringLength y <= 1;

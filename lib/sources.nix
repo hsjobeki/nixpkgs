@@ -18,7 +18,7 @@ let
     pathIsRegularFile
     ;
 
-  /*
+  /**
     A basic filter for `cleanSourceWith` that removes
     directories of version control system, backup files (*~)
     and some generated files.
@@ -40,32 +40,37 @@ let
     (type == "unknown")
   );
 
-  /*
+  /**
     Filters a source tree removing version control files and directories using cleanSourceFilter.
 
-    Example:
-             cleanSource ./.
+    # Example
+
+    ```nix
+    cleanSource ./.
+    ```
   */
   cleanSource = src: cleanSourceWith { filter = cleanSourceFilter; inherit src; };
 
-  /*
+  /**
     Like `builtins.filterSource`, except it will compose with itself,
     allowing you to chain multiple calls together without any
     intermediate copies being put in the nix store.
 
-    Example:
-        lib.cleanSourceWith {
-          filter = f;
-          src = lib.cleanSourceWith {
-            filter = g;
-            src = ./.;
-          };
-        }
-        # Succeeds!
+    # Example
 
-        builtins.filterSource f (builtins.filterSource g ./.)
-        # Fails!
-
+    ```nix
+    lib.cleanSourceWith {
+                  filter = f;
+                  src = lib.cleanSourceWith {
+                    filter = g;
+                    src = ./.;
+                  };
+                }
+                # Succeeds!
+    
+                builtins.filterSource f (builtins.filterSource g ./.)
+                # Fails!
+    ```
   */
   cleanSourceWith =
     {
@@ -90,10 +95,14 @@ let
       name = if name != null then name else orig.name;
     };
 
-  /*
+  /**
     Add logging to a source, for troubleshooting the filtering behavior.
-    Type:
-      sources.trace :: sourceLike -> Source
+
+    # Type
+
+    ```
+    sources.trace :: sourceLike -> Source
+    ```
   */
   trace =
     # Source to debug. The returned source will behave like this source, but also log its filter invocations.
@@ -113,10 +122,14 @@ let
         satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
       };
 
-  /*
+  /**
     Filter sources by a list of regular expressions.
 
-    Example: src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    # Example
+
+    ```nix
+    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    ```
   */
   sourceByRegex = src: regexes:
     let
@@ -129,16 +142,23 @@ let
       inherit src;
     };
 
-  /*
+  /**
     Get all files ending with the specified suffices from the given
     source directory or its descendants, omitting files that do not match
     any suffix. The result of the example below will include files like
     `./dir/module.c` and `./dir/subdir/doc.xml` if present.
 
-    Type: sourceLike -> [String] -> Source
+    # Example
 
-    Example:
-      sourceFilesBySuffices ./. [ ".xml" ".c" ]
+    ```nix
+    sourceFilesBySuffices ./. [ ".xml" ".c" ]
+    ```
+
+    # Type
+
+    ```
+    sourceLike -> [String] -> Source
+    ```
   */
   sourceFilesBySuffices =
     # Path or source containing the files to be returned
@@ -152,10 +172,14 @@ let
 
   pathIsGitRepo = path: (_commitIdFromGitRepoOrError path)?value;
 
-  /*
+  /**
     Get the commit id of a git repo.
 
-    Example: commitIdFromGitRepo <nixpkgs/.git>
+    # Example
+
+    ```nix
+    commitIdFromGitRepo <nixpkgs/.git>
+    ```
   */
   commitIdFromGitRepo = path:
     let commitIdOrError = _commitIdFromGitRepoOrError path;

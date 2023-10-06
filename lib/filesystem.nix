@@ -16,19 +16,25 @@ in
 
 {
 
-  /*
+  /**
     The type of a path. The path needs to exist and be accessible.
     The result is either "directory" for a directory, "regular" for a regular file, "symlink" for a symlink, or "unknown" for anything else.
 
-    Type:
-      pathType :: Path -> String
+    # Example
 
-    Example:
-      pathType /.
-      => "directory"
+    ```nix
+    pathType /.
+              => "directory"
+    
+              pathType /some/file.nix
+              => "regular"
+    ```
 
-      pathType /some/file.nix
-      => "regular"
+    # Type
+
+    ```
+    pathType :: Path -> String
+    ```
   */
   pathType =
     builtins.readFileType or
@@ -46,50 +52,66 @@ in
       else (readDir (dirOf path)).${baseNameOf path}
     );
 
-  /*
+  /**
     Whether a path exists and is a directory.
 
-    Type:
-      pathIsDirectory :: Path -> Bool
+    # Example
 
-    Example:
-      pathIsDirectory /.
-      => true
+    ```nix
+    pathIsDirectory /.
+              => true
+    
+              pathIsDirectory /this/does/not/exist
+              => false
+    
+              pathIsDirectory /some/file.nix
+              => false
+    ```
 
-      pathIsDirectory /this/does/not/exist
-      => false
+    # Type
 
-      pathIsDirectory /some/file.nix
-      => false
+    ```
+    pathIsDirectory :: Path -> Bool
+    ```
   */
   pathIsDirectory = path:
     pathExists path && pathType path == "directory";
 
-  /*
+  /**
     Whether a path exists and is a regular file, meaning not a symlink or any other special file type.
 
-    Type:
-      pathIsRegularFile :: Path -> Bool
+    # Example
 
-    Example:
-      pathIsRegularFile /.
-      => false
+    ```nix
+    pathIsRegularFile /.
+              => false
+    
+              pathIsRegularFile /this/does/not/exist
+              => false
+    
+              pathIsRegularFile /some/file.nix
+              => true
+    ```
 
-      pathIsRegularFile /this/does/not/exist
-      => false
+    # Type
 
-      pathIsRegularFile /some/file.nix
-      => true
+    ```
+    pathIsRegularFile :: Path -> Bool
+    ```
   */
   pathIsRegularFile = path:
     pathExists path && pathType path == "regular";
 
-  /*
+  /**
     A map of all haskell packages defined in the given path,
     identified by having a cabal file with the same name as the
     directory itself.
 
-    Type: Path -> Map String Path
+    # Type
+
+    ```
+    Path -> Map String Path
+    ```
   */
   haskellPathsInDir =
     # The directory within to search
@@ -107,12 +129,16 @@ in
             builtins.pathExists (value + "/${name}.cabal")
           ) root-files-with-paths;
     in builtins.listToAttrs cabal-subdirs;
-  /*
+  /**
     Find the first directory containing a file matching 'pattern'
     upward from a given 'file'.
     Returns 'null' if no directories contain a file matching 'pattern'.
 
-    Type: RegExp -> Path -> Nullable { path : Path; matches : [ MatchResults ]; }
+    # Type
+
+    ```
+    RegExp -> Path -> Nullable { path : Path; matches : [ MatchResults ]; }
+    ```
   */
   locateDominatingFile =
     # The pattern to search for
@@ -137,10 +163,14 @@ in
     in go (if isDir then file else parent);
 
 
-  /*
+  /**
     Given a directory, return a flattened list of all files within it recursively.
 
-    Type: Path -> [ Path ]
+    # Type
+
+    ```
+    Path -> [ Path ]
+    ```
   */
   listFilesRecursive =
     # The path to recursively list

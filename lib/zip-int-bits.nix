@@ -1,6 +1,7 @@
-/* Helper function to implement a fallback for the bit operators
-   `bitAnd`, `bitOr` and `bitXor` on older nix version.
-   See ./trivial.nix
+/**
+  Helper function to implement a fallback for the bit operators
+  `bitAnd`, `bitOr` and `bitXor` on older nix version.
+  See ./trivial.nix
 */
 f: x: y:
   let

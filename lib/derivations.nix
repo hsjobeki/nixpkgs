@@ -4,51 +4,50 @@ let
   inherit (lib) throwIfNot;
 in
 {
-  /*
+  /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
     saving a lot of computation when the derivation is non-trivial.
-
+    
     This is useful in situations where a derivation might only be used for its
     passthru attributes, improving evaluation performance.
-
+    
     The returned attribute set is lazy in `derivation`. Specifically, this
     means that the derivation will not be evaluated in at least the
     situations below.
-
+    
     For illustration and/or testing, we define derivation such that its
     evaluation is very noticeable.
-
-        let derivation = throw "This won't be evaluated.";
-
+    
+    let derivation = throw "This won't be evaluated.";
+    
     In the following expressions, `derivation` will _not_ be evaluated:
-
-        (lazyDerivation { inherit derivation; }).type
-
-        attrNames (lazyDerivation { inherit derivation; })
-
-        (lazyDerivation { inherit derivation; } // { foo = true; }).foo
-
-        (lazyDerivation { inherit derivation; meta.foo = true; }).meta
-
+    
+    (lazyDerivation { inherit derivation; }).type
+    
+    attrNames (lazyDerivation { inherit derivation; })
+    
+    (lazyDerivation { inherit derivation; } // { foo = true; }).foo
+    
+    (lazyDerivation { inherit derivation; meta.foo = true; }).meta
+    
     In these expressions, `derivation` _will_ be evaluated:
-
-        "${lazyDerivation { inherit derivation }}"
-
-        (lazyDerivation { inherit derivation }).outPath
-
-        (lazyDerivation { inherit derivation }).meta
-
+    
+    "${lazyDerivation { inherit derivation }}"
+    
+    (lazyDerivation { inherit derivation }).outPath
+    
+    (lazyDerivation { inherit derivation }).meta
+    
     And the following expressions are not valid, because the refer to
     implementation details and/or attributes that may not be present on
     some derivations:
-
-        (lazyDerivation { inherit derivation }).buildInputs
-
-        (lazyDerivation { inherit derivation }).passthru
-
-        (lazyDerivation { inherit derivation }).pythonPath
-
+    
+    (lazyDerivation { inherit derivation }).buildInputs
+    
+    (lazyDerivation { inherit derivation }).passthru
+    
+    (lazyDerivation { inherit derivation }).pythonPath
   */
   lazyDerivation =
     args@{

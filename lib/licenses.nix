@@ -20,10 +20,11 @@ lib.mapAttrs (lname: lset: let
     applyRedistributable
   ];
 in mkLicense lset) ({
-  /* License identifiers from spdx.org where possible.
-   * If you cannot find your license here, then look for a similar license or
-   * add it to this list. The URL mentioned above is a good source for inspiration.
-   */
+  /**
+    License identifiers from spdx.org where possible.
+    * If you cannot find your license here, then look for a similar license or
+    * add it to this list. The URL mentioned above is a good source for inspiration.
+  */
 
   abstyles = {
     spdxId = "Abstyles";
