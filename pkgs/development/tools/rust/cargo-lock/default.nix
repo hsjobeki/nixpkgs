@@ -17,7 +17,9 @@ rustPlatform.buildRustPackage rec {
     description = "Self-contained Cargo.lock parser with graph analysis";
     homepage = "https://github.com/rustsec/rustsec/tree/main/cargo-lock";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${version}/cargo-lock/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

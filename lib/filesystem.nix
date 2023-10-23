@@ -24,10 +24,9 @@ in
 
     ```nix
     pathType /.
-              => "directory"
-    
-              pathType /some/file.nix
-              => "regular"
+    => "directory"
+    pathType /some/file.nix
+    => "regular"
     ```
 
     # Type
@@ -59,13 +58,11 @@ in
 
     ```nix
     pathIsDirectory /.
-              => true
-    
-              pathIsDirectory /this/does/not/exist
-              => false
-    
-              pathIsDirectory /some/file.nix
-              => false
+    => true
+    pathIsDirectory /this/does/not/exist
+    => false
+    pathIsDirectory /some/file.nix
+    => false
     ```
 
     # Type
@@ -84,13 +81,11 @@ in
 
     ```nix
     pathIsRegularFile /.
-              => false
-    
-              pathIsRegularFile /this/does/not/exist
-              => false
-    
-              pathIsRegularFile /some/file.nix
-              => true
+    => false
+    pathIsRegularFile /this/does/not/exist
+    => false
+    pathIsRegularFile /some/file.nix
+    => true
     ```
 
     # Type

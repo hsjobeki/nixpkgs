@@ -191,9 +191,9 @@ let
     in
     lib.optionals (builtins.pathExists path && builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
 
-  /*
+  /**
     Provides a source filtering mechanism that:
-
+    
     - Filters gitignore's
     - Filters pycache/pyc files
     - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks

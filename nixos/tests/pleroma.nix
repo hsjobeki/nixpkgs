@@ -1,26 +1,26 @@
-/*
+/**
   Pleroma E2E VM test.
-
+  
   Abstract:
   =========
   Using pleroma, postgresql, a local CA cert, a nginx reverse proxy
   and a toot-based client, we're going to:
-
+  
   1. Provision a pleroma service from scratch (pleroma config + postgres db).
   2. Create a "jamy" admin user.
   3. Send a toot from this user.
   4. Send a upload from this user.
   5. Check the toot is part of the server public timeline
-
+  
   Notes:
   - We need a fully functional TLS setup without having any access to
-    the internet. We do that by issuing a self-signed cert, add this
-    self-cert to the hosts pki trust store and finally spoof the
-    hostnames using /etc/hosts.
+  the internet. We do that by issuing a self-signed cert, add this
+  self-cert to the hosts pki trust store and finally spoof the
+  hostnames using /etc/hosts.
   - For this NixOS test, we *had* to store some DB-related and
-    pleroma-related secrets to the store. Keep in mind the store is
-    world-readable, it's the worst place possible to store *any*
-    secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
+  pleroma-related secrets to the store. Keep in mind the store is
+  world-readable, it's the worst place possible to store *any*
+  secret. **DO NOT DO THIS IN A REAL WORLD DEPLOYMENT**.
 */
 
 import ./make-test-python.nix ({ pkgs, ... }:
@@ -60,10 +60,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   test-db-passwd = "SccZOvTGM//BMrpoQj68JJkjDkMGb4pHv2cECWiI+XhVe3uGJTLI0vFV/gDlZ5jJ";
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
-    DEPLOYMENT**.*/
+    DEPLOYMENT**.
+  */
   db-seed = pkgs.writeText "provision.psql" ''
     CREATE USER pleroma WITH ENCRYPTED PASSWORD '${test-db-passwd}';
     CREATE DATABASE pleroma OWNER pleroma;
@@ -111,7 +113,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
     config :pleroma, configurable_from_database: false
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
     DEPLOYMENT**.
@@ -134,21 +137,23 @@ import ./make-test-python.nix ({ pkgs, ... }:
       private_key: "k7o9onKMQrgMjMb6l4fsxSaXO0BTNAer5MVSje3q60k"
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
     DEPLOYMENT**.
     In a real-word deployment, you'd handle this either by:
     - manually upload your pleroma secrets to /var/lib/pleroma/secrets.exs
     - use a deployment tool such as morph or NixOps to deploy your secrets.
-    */
+  */
   provision-secrets = pkgs.writeScriptBin "provision-secrets" ''
     set -eux
     cp "${pleroma-conf-secret}" "/var/lib/pleroma/secrets.exs"
     chown pleroma:pleroma /var/lib/pleroma/secrets.exs
   '';
 
-  /* For this NixOS test, we *had* to store this secret to the store.
+  /**
+    For this NixOS test, we *had* to store this secret to the store.
     Keep in mind the store is world-readable, it's the worst place
     possible to store *any* secret. **DO NOT DO THIS IN A REAL WORLD
     DEPLOYMENT**.

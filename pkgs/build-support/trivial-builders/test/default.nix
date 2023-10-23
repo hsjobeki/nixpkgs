@@ -1,14 +1,13 @@
-/*
+/**
   Run all tests with:
-
-      cd nixpkgs
-      nix-build -A tests.trivial-builders
-
+  
+  cd nixpkgs
+  nix-build -A tests.trivial-builders
+  
   or run a specific test with:
-
-      cd nixpkgs
-      nix-build -A tests.trivial-builders.foo
-
+  
+  cd nixpkgs
+  nix-build -A tests.trivial-builders.foo
 */
 
 { callPackage, lib, stdenv }:

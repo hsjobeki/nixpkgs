@@ -60,16 +60,15 @@ let
 
     ```nix
     lib.cleanSourceWith {
-                  filter = f;
-                  src = lib.cleanSourceWith {
-                    filter = g;
-                    src = ./.;
-                  };
-                }
-                # Succeeds!
-    
-                builtins.filterSource f (builtins.filterSource g ./.)
-                # Fails!
+      filter = f;
+      src = lib.cleanSourceWith {
+        filter = g;
+        src = ./.;
+      };
+    }
+    # Succeeds!
+    builtins.filterSource f (builtins.filterSource g ./.)
+    # Fails!
     ```
   */
   cleanSourceWith =

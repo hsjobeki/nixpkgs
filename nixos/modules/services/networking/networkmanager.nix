@@ -55,14 +55,14 @@ let
     cfg.extraConfig
   ]);
 
-  /*
+  /**
     [network-manager]
     Identity=unix-group:networkmanager
     Action=org.freedesktop.NetworkManager.*
     ResultAny=yes
     ResultInactive=no
     ResultActive=yes
-
+    
     [modem-manager]
     Identity=unix-group:networkmanager
     Action=org.freedesktop.ModemManager*

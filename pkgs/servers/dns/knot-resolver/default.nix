@@ -6,7 +6,9 @@
 , jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
 # test-only deps.
 , cmocka, which, cacert
-, extraFeatures ? false /* catch-all if defaults aren't enough */
+, extraFeatures ? false /**
+  catch-all if defaults aren't enough
+*/
 }:
 let # un-indented, over the whole file
 
@@ -62,7 +64,9 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
+    ++ optionals stdenv.isLinux [ /**
+  lib
+*/systemd libcap_ng ]
     ++ [ jemalloc nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
@@ -98,7 +102,9 @@ unwrapped = stdenv.mkDerivation rec {
     homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat /* upstream developer */ ];
+    maintainers = [ maintainers.vcunat /**
+  upstream developer
+*/ ];
     mainProgram = "kresd";
   };
 };

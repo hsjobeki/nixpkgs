@@ -1,44 +1,44 @@
 { lib
 }:
 
-/*
+/**
   This is a set of tools to manipulate update scripts as recognized by update.nix.
   It is still very experimental with **instability** almost guaranteed so any use
   outside Nixpkgs is discouraged.
-
+  
   update.nix currently accepts the following type:
-
+  
   type UpdateScript
-    // Simple path to script to execute script
-    = FilePath
-    // Path to execute plus arguments to pass it
-    | [ (FilePath | String) ]
-    // Advanced attribue set (experimental)
-    | {
-      // Script to execute (same as basic update script above)
-      command : (FilePath | [ (FilePath | String) ])
-      // Features that the script supports
-      // - commit: (experimental) returns commit message in stdout
-      // - silent: (experimental) returns no stdout
-      supportedFeatures : ?[ ("commit" | "silent") ]
-      // Override attribute path detected by update.nix
-      attrPath : ?String
-    }
+  // Simple path to script to execute script
+  = FilePath
+  // Path to execute plus arguments to pass it
+  | [ (FilePath | String) ]
+  // Advanced attribue set (experimental)
+  | {
+  // Script to execute (same as basic update script above)
+  command : (FilePath | [ (FilePath | String) ])
+  // Features that the script supports
+  // - commit: (experimental) returns commit message in stdout
+  // - silent: (experimental) returns no stdout
+  supportedFeatures : ?[ ("commit" | "silent") ]
+  // Override attribute path detected by update.nix
+  attrPath : ?String
+  }
 */
 
 let
-  /*
+  /**
     type ShellArg = String | { __rawShell : String }
   */
 
-  /*
+  /**
     Quotes all arguments to be safely passed to the Bourne shell.
-
+    
     escapeShellArgs' : [ShellArg] -> String
   */
   escapeShellArgs' = lib.concatMapStringsSep " " (arg: if arg ? __rawShell then arg.__rawShell else lib.escapeShellArg arg);
 
-  /*
+  /**
     processArg : { maxArgIndex : Int, args : [ShellArg], paths : [FilePath] } → (String|FilePath) → { maxArgIndex : Int, args : [ShellArg], paths : [FilePath] }
     Helper reducer function for building a command arguments where file paths are replaced with argv[x] reference.
   */
@@ -53,12 +53,12 @@ let
       args = args ++ [ arg ];
       inherit maxArgIndex paths;
     };
-  /*
+  /**
     extractPaths : Int → [ (String|FilePath) ] → { maxArgIndex : Int, args : [ShellArg], paths : [FilePath] }
     Helper function that extracts file paths from command arguments and replaces them with argv[x] references.
   */
   extractPaths = maxArgIndex: command: builtins.foldl' processArg { inherit maxArgIndex; args = [ ]; paths = [ ]; } command;
-  /*
+  /**
     processCommand : { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] } → [ (String|FilePath) ] → { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] }
     Helper reducer function for extracting file paths from individual commands.
   */
@@ -73,13 +73,13 @@ let
       paths = paths ++ new.paths;
       maxArgIndex = new.maxArgIndex;
     };
-  /*
+  /**
     extractCommands : Int → [[ (String|FilePath) ]] → { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] }
     Helper function for extracting file paths from a list of commands and replacing them with argv[x] references.
   */
   extractCommands = maxArgIndex: commands: builtins.foldl' processCommand { inherit maxArgIndex; commands = [ ]; paths = [ ]; } commands;
 
-  /*
+  /**
     commandsToShellInvocation : [[ (String|FilePath) ]] → [ (String|FilePath) ]
     Converts a list of commands into a single command by turning them into a shell script and passing them to `sh -c`.
   */
@@ -96,7 +96,7 @@ let
     ] ++ extracted.paths;
 in
 rec {
-  /*
+  /**
     normalize : UpdateScript → UpdateScript
     EXPERIMENTAL! Converts a basic update script to the experimental attribute set form.
   */
@@ -107,7 +107,7 @@ rec {
     inherit (updateScript) attrPath;
   };
 
-  /*
+  /**
     sequence : [UpdateScript] → UpdateScript
     EXPERIMENTAL! Combines multiple update scripts to run in sequence.
   */
@@ -137,7 +137,7 @@ rec {
       ];
     };
 
-  /*
+  /**
     copyAttrOutputToFile : String → FilePath → UpdateScript
     EXPERIMENTAL! Simple update script that copies the output of Nix derivation built by `attr` to `path`.
   */

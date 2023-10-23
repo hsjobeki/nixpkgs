@@ -508,7 +508,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsbat-distro-url=https://nixos.org/"
     "-Dsbat-distro-pkgname=${pname}"
     "-Dsbat-distro-version=${version}"
-    /*
+    /**
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
       should be supported however, see

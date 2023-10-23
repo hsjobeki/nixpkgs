@@ -34,18 +34,20 @@ stdenv.mkDerivation rec {
     description = "an effort to implement RFC9000 QUIC protocol.";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vcunat/* for knot-dns */ ];
+    maintainers = with maintainers; [ vcunat/**
+  for knot-dns
+*/ ];
   };
 }
 
-/*
+/**
   Why split from ./default.nix?
-
+  
   ngtcp2 libs contain helpers to plug into various crypto libs (gnutls, patched openssl, ...).
   Building multiple of them while keeping closures separable would be relatively complicated.
   Separating the builds is easier for now; the missed opportunity to share the 0.3--0.4 MB
   library isn't such a big deal.
-
+  
   Moreover upstream still commonly does incompatible changes, so agreeing
   on a single version might be hard sometimes.  That's why it seemed simpler
   to completely separate the nix expressions, too.

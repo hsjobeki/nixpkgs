@@ -5,26 +5,26 @@
 , autoPatchelfHook, makeWrapper, stdenv, lttng-ust, libkrb5, zlib
 }:
 
-/*
+/**
   Note that this version of the extension still has some nix specific issues
   which could not be fixed merely by patching (inside a C# dll).
-
+  
   In particular, the debugger requires either gnome-terminal or xterm. However
   instead of looking for the terminal executable in `PATH`, for any linux platform
   the dll uses an hardcoded path to one of these.
-
+  
   So, in order for debugging to work properly, you merely need to create symlinks
   to one of these terminals at the appropriate location.
-
+  
   The good news is the the utility library is open source and with some effort
   we could build a patched version ourselves. See:
-
+  
   <https://github.com/Microsoft/MIEngine/blob/2885386dc7f35e0f1e44827269341e786361f28e/src/MICore/TerminalLauncher.cs#L156>
-
+  
   Also, the extension should eventually no longer require an external terminal. See:
-
+  
   <https://github.com/Microsoft/vscode-cpptools/issues/35>
-
+  
   Once the symbolic link temporary solution taken, everything shoud run smootly.
 */
 

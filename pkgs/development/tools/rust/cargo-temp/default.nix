@@ -17,7 +17,9 @@ rustPlatform.buildRustPackage rec {
     description = "A CLI tool that allow you to create a temporary new Rust project using cargo with already installed dependencies";
     homepage = "https://github.com/yozhgoor/cargo-temp";
     changelog = "https://github.com/yozhgoor/cargo-temp/releases/tag/${src.rev}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

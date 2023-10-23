@@ -1,27 +1,25 @@
-/*
-
-# New packages
-
-READ THIS FIRST
-
-This module is for official packages in KDE Frameworks 5. All available packages
-are listed in `./srcs.nix`, although a few are not yet packaged in Nixpkgs (see
-below).
-
-IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
-
-Many of the packages released upstream are not yet built in Nixpkgs due to lack
-of demand. To add a Nixpkgs build for an upstream package, copy one of the
-existing packages here and modify it as necessary.
-
-# Updates
-
-1. Update the URL in `./fetch.sh`.
-2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/kde-frameworks`
-   from the top of the Nixpkgs tree.
-3. Use `nox-review wip` to check that everything builds.
-4. Commit the changes and open a pull request.
-
+/**
+  # New packages
+  
+  READ THIS FIRST
+  
+  This module is for official packages in KDE Frameworks 5. All available packages
+  are listed in `./srcs.nix`, although a few are not yet packaged in Nixpkgs (see
+  below).
+  
+  IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
+  
+  Many of the packages released upstream are not yet built in Nixpkgs due to lack
+  of demand. To add a Nixpkgs build for an upstream package, copy one of the
+  existing packages here and modify it as necessary.
+  
+  # Updates
+  
+  1. Update the URL in `./fetch.sh`.
+  2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/kde-frameworks`
+  from the top of the Nixpkgs tree.
+  3. Use `nox-review wip` to check that everything builds.
+  4. Commit the changes and open a pull request.
 */
 
 { libsForQt5, lib, fetchurl }:

@@ -1,9 +1,9 @@
-/*
-How to combine packages for use in development:
-dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
-
-Hashes and urls are retrieved from:
-https://dotnet.microsoft.com/download/dotnet
+/**
+  How to combine packages for use in development:
+  dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
+  
+  Hashes and urls are retrieved from:
+  https://dotnet.microsoft.com/download/dotnet
 */
 { callPackage }:
 let

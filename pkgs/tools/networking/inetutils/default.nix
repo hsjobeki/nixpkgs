@@ -20,8 +20,12 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ help2man perl /* for `whois' */ ];
-  buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
+  nativeBuildInputs = [ help2man perl /**
+  for `whois'
+*/ ];
+  buildInputs = [ ncurses /**
+  for `talk'
+*/ libxcrypt ];
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html

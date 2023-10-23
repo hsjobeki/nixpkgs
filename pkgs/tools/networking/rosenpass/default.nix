@@ -78,7 +78,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Build post-quantum-secure VPNs with WireGuard!";
     homepage = "https://rosenpass.eu/";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.all;
   };

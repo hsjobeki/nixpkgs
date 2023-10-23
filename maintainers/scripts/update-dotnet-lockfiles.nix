@@ -1,14 +1,14 @@
-/*
+/**
   To run:
-
-      nix-shell maintainers/scripts/update-dotnet-lockfiles.nix
-
+  
+  nix-shell maintainers/scripts/update-dotnet-lockfiles.nix
+  
   This script finds all the derivations in nixpkgs that have a 'fetch-deps'
   attribute, and runs all of them sequentially. This is useful to test changes
   to 'fetch-deps', 'nuget-to-nix', or other changes to the dotnet build
   infrastructure. Regular updates should be done through the individual packages
   update scripts.
- */
+*/
 let
   pkgs = import ../.. {};
 

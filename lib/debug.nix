@@ -268,19 +268,19 @@ rec {
 
     ```
     runTests :: {
-    tests = [ String ];
-    ${testName} :: {
-    expr :: a;
-    expected :: a;
-    };
+      tests = [ String ];
+      ${testName} :: {
+        expr :: a;
+        expected :: a;
+      };
     }
     ->
     [
-    {
-    name :: String;
-    expected :: a;
-    result :: a;
-    }
+      {
+        name :: String;
+        expected :: a;
+        result :: a;
+      }
     ]
     ```
   */

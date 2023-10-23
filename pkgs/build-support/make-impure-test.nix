@@ -1,32 +1,30 @@
-/* Create tests that run in the nix sandbox with additional access to selected host paths
-
+/**
+  Create tests that run in the nix sandbox with additional access to selected host paths
+  
   This is for example useful for testing hardware where a tests needs access to
   /sys and optionally more.
-
+  
   The following example shows a test that accesses the GPU:
 
-  Example:
-    makeImpureTest {
+  # Example
+
+  ```nix
+  makeImpureTest {
       name = "opencl";
       testedPackage = "mypackage"; # Or testPath = "mypackage.impureTests.opencl.testDerivation"
-
       sandboxPaths = [ "/sys" "/dev/dri" ]; # Defaults to ["/sys"]
       prepareRunCommands = ""; # (Optional) Setup for the runScript
       nixFlags = []; # (Optional) nix-build options for the runScript
-
       testScript = "...";
     }
-
   Save as `test.nix` next to a package and reference it from the package:
     passthru.impureTests = { opencl = callPackage ./test.nix {}; };
-
   `makeImpureTest` will return here a script that contains the actual nix-build command including all necessary sandbox flags.
-
   It can be executed like this:
     $(nix-build -A mypackage.impureTests)
-
   Rerun an already cached test:
     $(nix-build -A mypackage.impureTests) --check
+  ```
 */
 { lib
 , stdenv

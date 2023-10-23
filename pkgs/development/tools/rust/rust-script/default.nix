@@ -20,7 +20,9 @@ rustPlatform.buildRustPackage rec {
     description = "Run Rust files and expressions as scripts without any setup or compilation step";
     homepage = "https://rust-script.org";
     changelog = "https://github.com/fornwall/rust-script/releases/tag/${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -2854,7 +2854,8 @@ rec {
 # crate2nix/default.nix (excerpt start)
 #
 
-  /* Target (platform) data for conditional dependencies.
+  /**
+    Target (platform) data for conditional dependencies.
     This corresponds roughly to what buildRustCrate is setting.
   */
   defaultTarget = {
@@ -2880,7 +2881,9 @@ rec {
     debug_assertions = false;
   };
 
-  /* Filters common temp files and build files. */
+  /**
+    Filters common temp files and build files.
+  */
   # TODO(pkolloch): Substitute with gitignore filter
   sourceFilter = name: type:
     let
@@ -2926,9 +2929,10 @@ rec {
         || baseName == "tests.nix"
       );
 
-  /* Returns a crate which depends on successful test execution
+  /**
+    Returns a crate which depends on successful test execution
     of crate given as the second argument.
-
+    
     testCrateFlags: list of flags to pass to the test executable
     testInputs: list of packages that should be available during test execution
   */
@@ -3007,7 +3011,9 @@ rec {
       ${lib.concatMapStringsSep "\n" (output: "ln -s ${crate.${output}} ${"$"}${output}") crate.outputs}
     '';
 
-  /* A restricted overridable version of builtRustCratesWithFeatures. */
+  /**
+    A restricted overridable version of builtRustCratesWithFeatures.
+  */
   buildRustCrateWithFeatures =
     { packageId
     , features ? rootFeatures
@@ -3070,7 +3076,8 @@ rec {
       )
       { inherit features crateOverrides runTests testCrateFlags testInputs testPreRun testPostRun; };
 
-  /* Returns an attr set with packageId mapped to the result of buildRustCrateForPkgsFunc
+  /**
+    Returns an attr set with packageId mapped to the result of buildRustCrateForPkgsFunc
     for the corresponding crate.
   */
   builtRustCratesWithFeatures =
@@ -3190,7 +3197,9 @@ rec {
       in
       builtByPackageIdByPkgs;
 
-  /* Returns the actual derivations for the given dependencies. */
+  /**
+    Returns the actual derivations for the given dependencies.
+  */
   dependencyDerivations =
     { buildByPackageId
     , features
@@ -3208,7 +3217,8 @@ rec {
       in
       map depDerivation enabledDependencies;
 
-  /* Returns a sanitized version of val with all values substituted that cannot
+  /**
+    Returns a sanitized version of val with all values substituted that cannot
     be serialized as JSON.
   */
   sanitizeForJson = val:
@@ -3220,7 +3230,9 @@ rec {
     then "function"
     else val;
 
-  /* Returns various tools to debug a crate. */
+  /**
+    Returns various tools to debug a crate.
+  */
   debugCrate = { packageId, target ? defaultTarget }:
     assert (builtins.isString packageId);
     let
@@ -3253,9 +3265,10 @@ rec {
     in
     { internal = debug; };
 
-  /* Returns differences between cargo default features and crate2nix default
+  /**
+    Returns differences between cargo default features and crate2nix default
     features.
-
+    
     This is useful for verifying the feature resolution in crate2nix.
   */
   diffDefaultPackageFeatures =
@@ -3291,8 +3304,9 @@ rec {
         inherit onlyInCargo onlyInCrate2Nix differentFeatures;
       };
 
-  /* Returns an attrset mapping packageId to the list of enabled features.
-
+  /**
+    Returns an attrset mapping packageId to the list of enabled features.
+    
     If multiple paths to a dependency enable different features, the
     corresponding feature sets are merged. Features in rust are additive.
   */
@@ -3376,7 +3390,9 @@ rec {
       in
       cacheWithAll;
 
-  /* Returns the enabled dependencies given the enabled features. */
+  /**
+    Returns the enabled dependencies given the enabled features.
+  */
   filterEnabledDependencies = { dependencies, features, target }:
     assert (builtins.isList dependencies);
     assert (builtins.isList features);
@@ -3396,7 +3412,9 @@ rec {
       )
       dependencies;
 
-  /* Returns whether the given feature should enable the given dependency. */
+  /**
+    Returns whether the given feature should enable the given dependency.
+  */
   doesFeatureEnableDependency = dependency: feature:
     let
       name = dependency.rename or dependency.name;
@@ -3406,9 +3424,10 @@ rec {
     in
     feature == name || startsWithPrefix;
 
-  /* Returns the expanded features for the given inputFeatures by applying the
+  /**
+    Returns the expanded features for the given inputFeatures by applying the
     rules in featureMap.
-
+    
     featureMap is an attribute set which maps feature names to lists of further
     feature names to enable in case this feature is selected.
   */
@@ -3423,7 +3442,8 @@ rec {
     in
     sortedUnique outFeatures;
 
-  /* This function adds optional dependencies as features if they are enabled
+  /**
+    This function adds optional dependencies as features if they are enabled
     indirectly by dependency features. This function mimics Cargo's behavior
     described in a note at:
     https://doc.rust-lang.org/nightly/cargo/reference/features.html#dependency-features
@@ -3447,9 +3467,9 @@ rec {
     in
     sortedUnique (features ++ additionalFeatures);
 
-  /*
+  /**
     Returns the actual features for the given dependency.
-
+    
     features: The features of the crate that refers this dependency.
   */
   dependencyFeatures = features: dependency:
@@ -3471,7 +3491,9 @@ rec {
     in
     defaultOrNil ++ explicitFeatures ++ additionalDependencyFeatures;
 
-  /* Sorts and removes duplicates from a list of strings. */
+  /**
+    Sorts and removes duplicates from a list of strings.
+  */
   sortedUnique = features:
     assert (builtins.isList features);
     assert (builtins.all builtins.isString features);

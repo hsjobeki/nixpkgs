@@ -5,28 +5,28 @@
   python3,
 }:
 
-/*
+/**
   Can be used as part of an update script to automatically create a patch
   hardcoding the path of all GSettings schemas in C code.
   For example:
   passthru = {
-    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
-      inherit src;
-      schemaIdToVariableMapping = {
-         ...
-      };
-    };
-
-    updateScript =
-      let
-        updateSource = ...;
-        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
-      in
-      _experimental-update-script-combinators.sequence [
-        updateSource
-        updatePatch
-      ];
-    };
+  hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+  inherit src;
+  schemaIdToVariableMapping = {
+  ...
+  };
+  };
+  
+  updateScript =
+  let
+  updateSource = ...;
+  updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+  in
+  _experimental-update-script-combinators.sequence [
+  updateSource
+  updatePatch
+  ];
+  };
   }
   takes as input a mapping from schema path to variable name.
   For example `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`

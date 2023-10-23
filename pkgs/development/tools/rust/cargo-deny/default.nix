@@ -41,7 +41,9 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo plugin to generate list of all licenses for a crate";
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
     changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ figsoda matthiasbeyer jk ];
   };
 }

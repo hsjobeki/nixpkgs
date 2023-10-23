@@ -68,8 +68,9 @@ in
   inherit (pkgs) gimp;
 
   bimp = pluginDerivation rec {
-    /* menu:
-       File/Batch Image Manipulation...
+    /**
+      menu:
+      File/Batch Image Manipulation...
     */
     pname = "bimp";
     version = "2.6";
@@ -107,8 +108,9 @@ in
   };
 
   gap = pluginDerivation {
-    /* menu:
-       Video
+    /**
+      menu:
+      Video
     */
     pname = "gap";
     version = "2.6.0";
@@ -157,9 +159,10 @@ in
   };
 
   fourier = pluginDerivation rec {
-    /* menu:
-       Filters/Generic/FFT Forward
-       Filters/Generic/FFT Inverse
+    /**
+      menu:
+      Filters/Generic/FFT Forward
+      Filters/Generic/FFT Inverse
     */
     pname = "fourier";
     version = "0.4.3";
@@ -194,7 +197,8 @@ in
   };
 
   resynthesizer = pluginDerivation rec {
-    /* menu:
+    /**
+      menu:
       Edit/Fill with pattern seamless...
       Filters/Enhance/Heal selection...
       Filters/Enhance/Heal transparency...
@@ -237,7 +241,8 @@ in
   };
 
   waveletSharpen = pluginDerivation {
-    /* menu:
+    /**
+      menu:
       Filters/Enhance/Wavelet sharpen
     */
     pname = "wavelet-sharpen";
@@ -260,8 +265,9 @@ in
   };
 
   lqrPlugin = pluginDerivation rec {
-    /* menu:
-       Layer/Liquid Rescale
+    /**
+      menu:
+      Layer/Liquid Rescale
     */
     pname = "lqr-plugin";
     version = "0.7.2";
@@ -315,7 +321,9 @@ in
     };
   };
 
-  /* =============== simple script files ==================== */
+  /**
+    =============== simple script files ====================
+  */
 
   # also have a look at enblend-enfuse in all-packages.nix
   exposureBlend = scriptDerivation {

@@ -1,8 +1,8 @@
-/*
+/**
   End-to-end test for Akkoma.
-
+  
   Based in part on nixos/tests/pleroma.
-
+  
   TODO: Test federation.
 */
 import ./make-test-python.nix ({ pkgs, package ? pkgs.akkoma, confined ? false, ... }:

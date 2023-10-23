@@ -24,7 +24,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Test vectors for PyCryptodome cryptographic library";
     homepage = "https://www.pycryptodome.org/";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
+    license = with licenses; [ bsd2 /**
+  and
+*/ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

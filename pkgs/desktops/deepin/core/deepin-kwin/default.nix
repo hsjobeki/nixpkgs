@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
   pname = "deepin-kwin";
   version = "5.24.3-deepin.1.9";
 
-  /*
+  /**
     There are no buildable tag in github:
-      - 5.15 tag in eagel branch is used for UOS, it's too old to compile.
-      - 5.25 tag in master branch only work on unreleased deepin v23.
+    - 5.15 tag in eagel branch is used for UOS, it's too old to compile.
+    - 5.25 tag in master branch only work on unreleased deepin v23.
     Since deepin-kwin was not maintained on github before, we lost all
     tags in master branch, this version is read from debian/changelog
   */

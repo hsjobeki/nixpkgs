@@ -1,20 +1,20 @@
-/* Generate JSON, XML and DocBook documentation for given NixOS options.
-
-   Minimal example:
-
-    { pkgs,  }:
-
-    let
-      eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-        baseModules = [
-          ../module.nix
-        ];
-        modules = [];
-      };
-    in pkgs.nixosOptionsDoc {
-      options = eval.options;
-    }
-
+/**
+  Generate JSON, XML and DocBook documentation for given NixOS options.
+  
+  Minimal example:
+  
+  { pkgs,  }:
+  
+  let
+  eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+  baseModules = [
+  ../module.nix
+  ];
+  modules = [];
+  };
+  in pkgs.nixosOptionsDoc {
+  options = eval.options;
+  }
 */
 { pkgs
 , lib

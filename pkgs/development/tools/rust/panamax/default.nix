@@ -33,7 +33,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Mirror rustup and crates.io repositories for offline Rust and cargo usage";
     homepage = "https://github.com/panamax-rs/panamax";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

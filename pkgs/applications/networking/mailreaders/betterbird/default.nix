@@ -52,7 +52,9 @@ in ((buildMozillaMach {
     sha512 = "11d4c77049c532753c9b693d69ab9a0bcd0eb13d49f87a511ad8ba680b70041ac6f64c5f9cd5dd44246d46e7695d9bd51146b1fe62b0b7c9fbc862eb53d5cfda";
   };
 
-  extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
+  extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /**
+  bash
+*/ ''
     PATH=$PATH:${lib.makeBinPath [ git ]}
     patches=$(mktemp -d)
     for dir in branding bugs external features misc; do

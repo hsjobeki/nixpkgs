@@ -1,24 +1,24 @@
-/*
+/**
   Test suite for curl-impersonate
-
+  
   Abstract:
-    Uses the test suite from the curl-impersonate source repo which:
-
-    1. Performs requests with libcurl and captures the TLS client-hello
-       packets with tcpdump to compare against known-good signatures
-    2. Spins up an nghttpd2 server to test client HTTP/2 headers against
-       known-good headers
-
-    See https://github.com/lwthiker/curl-impersonate/tree/main/tests/signatures
-    for details.
-
+  Uses the test suite from the curl-impersonate source repo which:
+  
+  1. Performs requests with libcurl and captures the TLS client-hello
+  packets with tcpdump to compare against known-good signatures
+  2. Spins up an nghttpd2 server to test client HTTP/2 headers against
+  known-good headers
+  
+  See https://github.com/lwthiker/curl-impersonate/tree/main/tests/signatures
+  for details.
+  
   Notes:
-    - We need to have our own web server running because the tests expect to be able
-      to hit domains like wikipedia.org and the sandbox has no internet
-    - We need to be able to do (verifying) TLS handshakes without internet access.
-      We do that by creating a trusted CA and issuing a cert that includes
-      all of the test domains as subject-alternative names and then spoofs the
-      hostnames in /etc/hosts.
+  - We need to have our own web server running because the tests expect to be able
+  to hit domains like wikipedia.org and the sandbox has no internet
+  - We need to be able to do (verifying) TLS handshakes without internet access.
+  We do that by creating a trusted CA and issuing a cert that includes
+  all of the test domains as subject-alternative names and then spoofs the
+  hostnames in /etc/hosts.
 */
 
 import ./make-test-python.nix ({ pkgs, lib, ... }: let

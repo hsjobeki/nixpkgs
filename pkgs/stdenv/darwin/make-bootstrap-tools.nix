@@ -311,15 +311,15 @@ in rec {
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   # TODO: uncomment once https://github.com/NixOS/nixpkgs/issues/222717 is resolved
-  /*
-  test-pkgs = import test-pkgspath {
+  /**
+    test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
     localSystem = if crossSystem != null then crossSystem else localSystem;
-
+    
     stdenvStages = args: let
-        args' = args // { inherit bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
-  };
+    args' = args // { inherit bootstrapFiles; };
+    in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
+    };
   */
 }

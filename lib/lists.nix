@@ -121,19 +121,70 @@ rec {
     in foldl' (length list - 1);
 
   /**
-    Strict version of `foldl`.
+    Reduce a list by applying a binary operator from left to right,
+    starting with an initial accumulator.
     
-    The difference is that evaluation is forced upon access. Usually used
-    with small whole results (in contrast with lazily-generated list or large
-    lists where only a part is consumed.)
+    Before each application of the operator, the accumulator value is evaluated.
+    This behavior makes this function stricter than [`foldl`](#function-library-lib.lists.foldl).
+    
+    Unlike [`builtins.foldl'`](https://nixos.org/manual/nix/unstable/language/builtins.html#builtins-foldl'),
+    the initial accumulator argument is evaluated before the first iteration.
+    
+    A call like
+    
+    ```nix
+    foldl' op acc₀ [ x₀ x₁ x₂ ... xₙ₋₁ xₙ ]
+    ```
+    
+    is (denotationally) equivalent to the following,
+    but with the added benefit that `foldl'` itself will never overflow the stack.
+    
+    ```nix
+    let
+    acc₁   = builtins.seq acc₀   (op acc₀   x₀  );
+    acc₂   = builtins.seq acc₁   (op acc₁   x₁  );
+    acc₃   = builtins.seq acc₂   (op acc₂   x₂  );
+    ...
+    accₙ   = builtins.seq accₙ₋₁ (op accₙ₋₁ xₙ₋₁);
+    accₙ₊₁ = builtins.seq accₙ   (op accₙ   xₙ  );
+    in
+    accₙ₊₁
+    
+    # Or ignoring builtins.seq
+    op (op (... (op (op (op acc₀ x₀) x₁) x₂) ...) xₙ₋₁) xₙ
+    ```
+
+    # Example
+
+    ```nix
+    foldl' (acc: x: acc + x) 0 [1 2 3]
+    => 6
+    ```
 
     # Type
 
     ```
-    foldl' :: (b -> a -> b) -> b -> [a] -> b
+    foldl' :: (acc -> x -> acc) -> acc -> [x] -> acc
     ```
   */
-  foldl' = builtins.foldl' or foldl;
+  foldl' =
+    /**
+      The binary operation to run, where the two arguments are:
+      
+      1. `acc`: The current accumulator value: Either the initial one for the first iteration, or the result of the previous iteration
+      2. `x`: The corresponding list element for this iteration
+    */
+    op:
+    # The initial accumulator value
+    acc:
+    # The list to fold
+    list:
+
+    # The builtin `foldl'` is a bit lazier than one might expect.
+    # See https://github.com/NixOS/nix/pull/7158.
+    # In particular, the initial accumulator value is not forced before the first iteration starts.
+    builtins.seq acc
+      (builtins.foldl' op acc list);
 
   /**
     Map with index starting from 0
@@ -564,20 +615,19 @@ rec {
 
     ```nix
     groupBy (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
-               => { true = [ 5 3 4 ]; false = [ 1 2 ]; }
-               groupBy (x: x.name) [ {name = "icewm"; script = "icewm &";}
-                                     {name = "xfce";  script = "xfce4-session &";}
-                                     {name = "icewm"; script = "icewmbg &";}
-                                     {name = "mate";  script = "gnome-session &";}
-                                   ]
-               => { icewm = [ { name = "icewm"; script = "icewm &"; }
-                              { name = "icewm"; script = "icewmbg &"; } ];
-                    mate  = [ { name = "mate";  script = "gnome-session &"; } ];
-                    xfce  = [ { name = "xfce";  script = "xfce4-session &"; } ];
-                  }
-    
-               groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
-               => { true = 12; false = 3; }
+    => { true = [ 5 3 4 ]; false = [ 1 2 ]; }
+    groupBy (x: x.name) [ {name = "icewm"; script = "icewm &";}
+                          {name = "xfce";  script = "xfce4-session &";}
+                          {name = "icewm"; script = "icewmbg &";}
+                          {name = "mate";  script = "gnome-session &";}
+                        ]
+    => { icewm = [ { name = "icewm"; script = "icewm &"; }
+                   { name = "icewm"; script = "icewmbg &"; } ];
+         mate  = [ { name = "mate";  script = "gnome-session &"; } ];
+         xfce  = [ { name = "xfce";  script = "xfce4-session &"; } ];
+       }
+    groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
+    => { true = 12; false = 3; }
     ```
   */
   groupBy' = op: nul: pred: lst: mapAttrs (name: foldl op nul) (groupBy pred lst);
@@ -666,16 +716,15 @@ rec {
 
     ```nix
     listDfs true hasPrefix [ "/home/user" "other" "/" "/home" ]
-                   == { minimal = "/";                  # minimal element
-                        visited = [ "/home/user" ];     # seen elements (in reverse order)
-                        rest    = [ "/home" "other" ];  # everything else
-                      }
-    
-                 listDfs true hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
-                   == { cycle   = "/";                  # cycle encountered at this element
-                        loops   = [ "/" ];              # and continues to these elements
-                        visited = [ "/" "/home/user" ]; # elements leading to the cycle (in reverse order)
-                        rest    = [ "/home" "other" ];  # everything else
+      == { minimal = "/";                  # minimal element
+           visited = [ "/home/user" ];     # seen elements (in reverse order)
+           rest    = [ "/home" "other" ];  # everything else
+         }
+    listDfs true hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
+      == { cycle   = "/";                  # cycle encountered at this element
+           loops   = [ "/" ];              # and continues to these elements
+           visited = [ "/" "/home/user" ]; # elements leading to the cycle (in reverse order)
+           rest    = [ "/home" "other" ];  # everything else
     ```
   */
   listDfs = stopOnCycles: before: list:
@@ -707,16 +756,13 @@ rec {
 
     ```nix
     toposort hasPrefix [ "/home/user" "other" "/" "/home" ]
-                   == { result = [ "/" "/home" "/home/user" "other" ]; }
-    
-                 toposort hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
-                   == { cycle = [ "/home/user" "/" "/" ]; # path leading to a cycle
-                        loops = [ "/" ]; }                # loops back to these elements
-    
-                 toposort hasPrefix [ "other" "/home/user" "/home" "/" ]
-                   == { result = [ "other" "/" "/home" "/home/user" ]; }
-    
-                 toposort (a: b: a < b) [ 3 2 1 ] == { result = [ 1 2 3 ]; }
+      == { result = [ "/" "/home" "/home/user" "other" ]; }
+    toposort hasPrefix [ "/home/user" "other" "/" "/home" "/" ]
+      == { cycle = [ "/home/user" "/" "/" ]; # path leading to a cycle
+           loops = [ "/" ]; }                # loops back to these elements
+    toposort hasPrefix [ "other" "/home/user" "/home" "/" ]
+      == { result = [ "other" "/" "/home" "/home/user" ]; }
+    toposort (a: b: a < b) [ 3 2 1 ] == { result = [ 1 2 3 ]; }
     ```
   */
   toposort = before: list:

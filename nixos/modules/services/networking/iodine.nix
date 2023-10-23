@@ -9,7 +9,9 @@ let
 
   iodinedUser = "iodined";
 
-  /* is this path made unreadable by ProtectHome = true ? */
+  /**
+    is this path made unreadable by ProtectHome = true ?
+  */
   isProtected = x: hasPrefix "/root" x || hasPrefix "/home" x;
 in
 {

@@ -92,7 +92,7 @@ let
 
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
-  /*
+  /**
     Return a store path with a closure containing everything including
     derivations and all build dependency outputs, all the way down.
   */

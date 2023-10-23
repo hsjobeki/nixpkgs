@@ -41,7 +41,9 @@ rustPlatform.buildRustPackage rec {
     description = "Audit Cargo.lock files for crates with security vulnerabilities";
     homepage = "https://rustsec.org";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-audit/v${version}/cargo-audit/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ basvandijk figsoda jk ];
   };
 }

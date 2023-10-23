@@ -1,13 +1,13 @@
-/*
+/**
   To run:
-
-      cd nixpkgs
-      nix-build -A tests.trivial-builders.writeTextFile
-
+  
+  cd nixpkgs
+  nix-build -A tests.trivial-builders.writeTextFile
+  
   or to run an individual test case
-
-      cd nixpkgs
-      nix-build -A tests.trivial-builders.writeTextFile.foo
+  
+  cd nixpkgs
+  nix-build -A tests.trivial-builders.writeTextFile.foo
 */
 { lib, runCommand, runtimeShell, writeTextFile }:
 let

@@ -43,7 +43,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Serial flasher utility for Espressif SoCs and modules based on esptool.py";
     homepage = "https://github.com/esp-rs/cargo-espflash";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

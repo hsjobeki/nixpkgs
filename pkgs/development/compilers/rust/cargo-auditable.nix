@@ -23,7 +23,9 @@ let
       description = "A tool to make production Rust binaries auditable";
       homepage = "https://github.com/rust-secure-code/cargo-auditable";
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
-      license = with licenses; [ mit /* or */ asl20 ];
+      license = with licenses; [ mit /**
+  or
+*/ asl20 ];
       maintainers = with maintainers; [ figsoda ];
       broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };

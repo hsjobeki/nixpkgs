@@ -10,10 +10,9 @@ rec {
 
     ```nix
     assertMsg false "nope"
-               stderr> error: nope
-    
-               assert assertMsg ("foo" == "bar") "foo is not bar, silly"; ""
-               stderr> error: foo is not bar, silly
+    stderr> error: nope
+    assert assertMsg ("foo" == "bar") "foo is not bar, silly"; ""
+    stderr> error: foo is not bar, silly
     ```
 
     # Type

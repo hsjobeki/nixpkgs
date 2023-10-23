@@ -230,10 +230,10 @@ in
       "nut/upssched.conf".source = cfg.schedulerRules;
       # These file are containing private information and thus should not
       # be stored inside the Nix store.
-      /*
-      "nut/upsd.conf".source = "";
-      "nut/upsd.users".source = "";
-      "nut/upsmon.conf".source = "";
+      /**
+        "nut/upsd.conf".source = "";
+        "nut/upsd.users".source = "";
+        "nut/upsmon.conf".source = "";
       */
     };
 
@@ -246,17 +246,17 @@ in
       '';
 
 
-/*
-    users.users.nut =
-      { uid = 84;
-        home = "/var/lib/nut";
-        createHome = true;
-        group = "nut";
-        description = "UPnP A/V Media Server user";
-      };
-
-    users.groups."nut" =
-      { gid = 84; };
+/**
+  users.users.nut =
+  { uid = 84;
+  home = "/var/lib/nut";
+  createHome = true;
+  group = "nut";
+  description = "UPnP A/V Media Server user";
+  };
+  
+  users.groups."nut" =
+  { gid = 84; };
 */
 
   };

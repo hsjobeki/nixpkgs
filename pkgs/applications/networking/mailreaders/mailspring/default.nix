@@ -82,7 +82,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = /* sh */ ''
+  postFixup = /**
+  sh
+*/ ''
     substituteInPlace $out/share/applications/Mailspring.desktop \
       --replace Exec=mailspring Exec=$out/bin/mailspring
   '';

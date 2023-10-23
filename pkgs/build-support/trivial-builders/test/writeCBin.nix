@@ -1,8 +1,8 @@
-/*
+/**
   Run with:
-
-      cd nixpkgs
-      nix-build -A tests.trivial-builders.writeCBin
+  
+  cd nixpkgs
+  nix-build -A tests.trivial-builders.writeCBin
 */
 
 { lib, writeCBin, runCommand }:

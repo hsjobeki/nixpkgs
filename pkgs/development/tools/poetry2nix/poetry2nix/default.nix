@@ -96,11 +96,11 @@ lib.makeScope pkgs.newScope (self: {
 
   inherit version;
 
-  /* Returns a package of editable sources whose changes will be available without needing to restart the
+  /**
+    Returns a package of editable sources whose changes will be available without needing to restart the
     nix-shell.
     In editablePackageSources you can pass a mapping from package name to source directory to have
     those packages available in the resulting environment, whose source changes are immediately available.
-
   */
   mkPoetryEditablePackage =
     { projectDir ? null
@@ -115,7 +115,8 @@ lib.makeScope pkgs.newScope (self: {
         inherit pyProject python pkgs lib poetryLib editablePackageSources;
       };
 
-  /* Returns a package containing scripts defined in tool.poetry.scripts.
+  /**
+    Returns a package containing scripts defined in tool.poetry.scripts.
   */
   mkPoetryScriptsPackage =
     { projectDir ? null
@@ -129,7 +130,7 @@ lib.makeScope pkgs.newScope (self: {
         inherit lib python scripts;
       };
 
-  /*
+  /**
     Returns an attrset { python, poetryPackages, pyProject, poetryLock } for the given pyproject/lockfile.
   */
   mkPoetryPackages =
@@ -149,7 +150,9 @@ lib.makeScope pkgs.newScope (self: {
     , extras ? [ "*" ]
     }:
     let
-      /* The default list of poetry2nix override overlays */
+      /**
+        The default list of poetry2nix override overlays
+      */
       mkEvalPep508 = import ./pep508.nix {
         inherit lib poetryLib;
         inherit (python) stdenv;
@@ -291,7 +294,8 @@ lib.makeScope pkgs.newScope (self: {
       inputAttrs = mkInputAttrs { inherit py pyProject groups checkGroups extras; attrs = { }; includeBuildSystem = false; };
 
       requiredPythonModules = python.pkgs.requiredPythonModules;
-      /* Include all the nested dependencies which are required for each package.
+      /**
+        Include all the nested dependencies which are required for each package.
         This guarantees that using the "poetryPackages" attribute will return
         complete list of dependencies for the poetry project to be portable.
       */
@@ -306,12 +310,16 @@ lib.makeScope pkgs.newScope (self: {
       inherit pyProject;
     };
 
-  /* Returns a package with a python interpreter and all packages specified in the poetry.lock lock file.
+  /**
+    Returns a package with a python interpreter and all packages specified in the poetry.lock lock file.
     In editablePackageSources you can pass a mapping from package name to source directory to have
     those packages available in the resulting environment, whose source changes are immediately available.
 
-    Example:
+    # Example
+
+    ```nix
     poetry2nix.mkPoetryEnv { poetrylock = ./poetry.lock; python = python3; }
+    ```
   */
   mkPoetryEnv =
     { projectDir ? null
@@ -371,8 +379,9 @@ lib.makeScope pkgs.newScope (self: {
     in
     poetryPython.python.withPackages (ps: envPkgs ++ (extraPackages ps));
 
-  /* Creates a Python application from pyproject.toml and poetry.lock
-
+  /**
+    Creates a Python application from pyproject.toml and poetry.lock
+    
     The result also contains a .dependencyEnv attribute which is a python
     environment of all dependencies and this apps modules. This is useful if
     you rely on dependencies to invoke your modules for deployment: e.g. this
@@ -466,7 +475,9 @@ lib.makeScope pkgs.newScope (self: {
     in
     app;
 
-  /* Poetry2nix CLI used to supplement SHA-256 hashes for git dependencies  */
+  /**
+    Poetry2nix CLI used to supplement SHA-256 hashes for git dependencies
+  */
   cli = import ./cli.nix {
     inherit pkgs lib;
     inherit (self) version;
@@ -477,7 +488,7 @@ lib.makeScope pkgs.newScope (self: {
   inherit (poetryLib) cleanPythonSources;
 
 
-  /*
+  /**
     Create a new default set of overrides with the same structure as the built-in ones
   */
   mkDefaultPoetryOverrides = defaults: {
@@ -501,25 +512,25 @@ lib.makeScope pkgs.newScope (self: {
       self.mkDefaultPoetryOverrides overlay;
   };
 
-  /*
+  /**
     The default list of poetry2nix override overlays
-
+    
     Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
   defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib; });
 
-  /*
+  /**
     Convenience functions for specifying overlays with or without the poerty2nix default overrides
   */
   overrides = {
-    /*
+    /**
       Returns the specified overlay in a list
     */
     withoutDefaults = overlay: [
       overlay
     ];
 
-    /*
+    /**
       Returns the specified overlay and returns a list
       combining it with poetry2nix default overrides
     */

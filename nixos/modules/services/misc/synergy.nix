@@ -123,27 +123,28 @@ in
 
 }
 
-/* SYNERGY SERVER example configuration file
-section: screens
+/**
+  SYNERGY SERVER example configuration file
+  section: screens
   laptop:
   dm:
   win:
-end
-section: aliases
-    laptop:
-      192.168.5.5
-    dm:
-      192.168.5.78
-    win:
-      192.168.5.54
-end
-section: links
-   laptop:
-       left = dm
-   dm:
-       right = laptop
-       left = win
+  end
+  section: aliases
+  laptop:
+  192.168.5.5
+  dm:
+  192.168.5.78
   win:
-      right = dm
-end
+  192.168.5.54
+  end
+  section: links
+  laptop:
+  left = dm
+  dm:
+  right = laptop
+  left = win
+  win:
+  right = dm
+  end
 */

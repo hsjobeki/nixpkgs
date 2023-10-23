@@ -18,7 +18,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tool to convert TOML files to Nix expressions";
     homepage = "https://crates.io/crates/toml2nix";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -30,7 +30,9 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line options, arguments and sub-commands parser for bash";
     homepage = "https://github.com/sigoden/argc";
     changelog = "https://github.com/sigoden/argc/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [ mit /**
+  or
+*/ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

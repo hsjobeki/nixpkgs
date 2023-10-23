@@ -221,7 +221,9 @@ self = stdenv.mkDerivation {
     expat llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
-    libpthreadstubs openssl /*or another sha1 provider*/
+    libpthreadstubs openssl /**
+  or another sha1 provider
+*/
     zstd libunwind
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]

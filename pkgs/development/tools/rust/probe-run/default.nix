@@ -39,7 +39,9 @@ rustPlatform.buildRustPackage rec {
     description = "Run embedded programs just like native ones";
     homepage = "https://github.com/knurling-rs/probe-run";
     changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ hoverbear newam ];
   };
 }

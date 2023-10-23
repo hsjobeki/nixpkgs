@@ -50,29 +50,23 @@ rec {
 
     ```nix
     pipe 2 [
-                 (x: x + 2)  # 2 + 2 = 4
-                 (x: x * 2)  # 4 * 2 = 8
-               ]
-               => 8
-    
-               # ideal to do text transformations
-               pipe [ "a/b" "a/c" ] [
-    
-                 # create the cp command
-                 (map (file: ''cp "${src}/${file}" $out\n''))
-    
-                 # concatenate all commands into one string
-                 lib.concatStrings
-    
-                 # make that string into a nix derivation
-                 (pkgs.runCommand "copy-to-out" {})
-    
-               ]
-               => <drv which copies all files to $out>
-    
-             The output type of each function has to be the input type
-             of the next function, and the last function returns the
-             final value.
+        (x: x + 2)  # 2 + 2 = 4
+        (x: x * 2)  # 4 * 2 = 8
+      ]
+      => 8
+      # ideal to do text transformations
+      pipe [ "a/b" "a/c" ] [
+        # create the cp command
+        (map (file: ''cp "${src}/${file}" $out\n''))
+        # concatenate all commands into one string
+        lib.concatStrings
+        # make that string into a nix derivation
+        (pkgs.runCommand "copy-to-out" {})
+      ]
+      => <drv which copies all files to $out>
+    The output type of each function has to be the input type
+    of the next function, and the last function returns the
+    final value.
     ```
 
     # Type
@@ -381,14 +375,12 @@ rec {
 
     ```nix
     let cmp = splitByAndCompare (hasPrefix "foo") compare compare; in
-    
-               cmp "a" "z" => -1
-               cmp "fooa" "fooz" => -1
-    
-               cmp "f" "a" => 1
-               cmp "fooa" "a" => -1
-               # while
-               compare "fooa" "a" => 1
+    cmp "a" "z" => -1
+    cmp "fooa" "fooz" => -1
+    cmp "f" "a" => 1
+    cmp "fooa" "a" => -1
+    # while
+    compare "fooa" "a" => 1
     ```
 
     # Type
@@ -606,10 +598,9 @@ rec {
 
     ```nix
     nix-repl> lib.toFunction 1 2
-              1
-    
-              nix-repl> lib.toFunction (x: x + 1) 2
-              3
+    1
+    nix-repl> lib.toFunction (x: x + 1) 2
+    3
     ```
   */
   toFunction =

@@ -114,7 +114,9 @@ let inherit version;
 
     patches = callFile ./patches {};
 
-    /* Cross-gcc settings (build == host != target) */
+    /**
+      Cross-gcc settings (build == host != target)
+    */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
     stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";

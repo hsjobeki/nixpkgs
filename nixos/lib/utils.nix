@@ -142,40 +142,37 @@ rec {
 
     ```nix
     If the file "/path/to/secret" contains the string
-               "topsecretpassword1234",
-    
-               genJqSecretsReplacementSnippet {
-                 example = [
-                   {
-                     irrelevant = "not interesting";
-                   }
-                   {
-                     ignored = "ignored attr";
-                     relevant = {
-                       secret = {
-                         _secret = "/path/to/secret";
-                       };
-                     };
-                   }
-                 ];
-               } "/path/to/output.json"
-    
-               would generate a snippet that, when run, outputs the following
-               JSON file at "/path/to/output.json":
-    
-               {
-                 "example": [
-                   {
-                     "irrelevant": "not interesting"
-                   },
-                   {
-                     "ignored": "ignored attr",
-                     "relevant": {
-                       "secret": "topsecretpassword1234"
-                     }
-                   }
-                 ]
-               }
+    "topsecretpassword1234",
+    genJqSecretsReplacementSnippet {
+      example = [
+        {
+          irrelevant = "not interesting";
+        }
+        {
+          ignored = "ignored attr";
+          relevant = {
+            secret = {
+              _secret = "/path/to/secret";
+            };
+          };
+        }
+      ];
+    } "/path/to/output.json"
+    would generate a snippet that, when run, outputs the following
+    JSON file at "/path/to/output.json":
+    {
+      "example": [
+        {
+          "irrelevant": "not interesting"
+        },
+        {
+          "ignored": "ignored attr",
+          "relevant": {
+            "secret": "topsecretpassword1234"
+          }
+        }
+      ]
+    }
     ```
   */
   genJqSecretsReplacementSnippet = genJqSecretsReplacementSnippet' "_secret";
@@ -185,6 +182,7 @@ rec {
   genJqSecretsReplacementSnippet' = attr: set: output:
     let
       secrets = recursiveGetAttrWithJqPrefix set attr;
+      stringOrDefault = str: def: if str == "" then def else str;
     in ''
       if [[ -h '${output}' ]]; then
         rm '${output}'
@@ -203,10 +201,12 @@ rec {
                (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' "
-    + lib.escapeShellArg (concatStringsSep
-      " | "
-      (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets)))
+    + lib.escapeShellArg (stringOrDefault
+          (concatStringsSep
+            " | "
+            (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
+                   (attrNames secrets)))
+          ".")
     + ''
        <<'EOF'
       ${builtins.toJSON set}

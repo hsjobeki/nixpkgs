@@ -9,17 +9,17 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
-  /*
+  /**
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
-
+    
     They might *appear* to satisfy `==` reflexivity when the same exact value is
     compared to itself, because object identity is used as an "optimization";
     compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
     or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
-
+    
     Hence a custom equality test.
-
+    
     Note that this does not canonicalize the systems, so you'll want to make sure
     both arguments have been `elaborate`-d.
   */
@@ -27,10 +27,11 @@ rec {
     let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
-  /* List of all Nix system doubles the nixpkgs flake will expose the package set
-     for. All systems listed here must be supported by nixpkgs as `localSystem`.
-
-     **Warning**: This attribute is considered experimental and is subject to change.
+  /**
+    List of all Nix system doubles the nixpkgs flake will expose the package set
+    for. All systems listed here must be supported by nixpkgs as `localSystem`.
+    
+    **Warning**: This attribute is considered experimental and is subject to change.
   */
   flakeExposed = import ./flake-systems.nix { };
 
@@ -64,7 +65,9 @@ rec {
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
-        else if final.isLinux /* default */ then "glibc"
+        else if final.isLinux /**
+  default
+*/ then "glibc"
         else if final.isFreeBSD             then "fblibc"
         else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"

@@ -14,33 +14,32 @@ rec {
 
     ```nix
     cli.toGNUCommandLine {} {
-                 data = builtins.toJSON { id = 0; };
-                 X = "PUT";
-                 retry = 3;
-                 retry-delay = null;
-                 url = [ "https://example.com/foo" "https://example.com/bar" ];
-                 silent = false;
-                 verbose = true;
-               }
-               => [
-                 "-X" "PUT"
-                 "--data" "{\"id\":0}"
-                 "--retry" "3"
-                 "--url" "https://example.com/foo"
-                 "--url" "https://example.com/bar"
-                 "--verbose"
-               ]
-    
-               cli.toGNUCommandLineShell {} {
-                 data = builtins.toJSON { id = 0; };
-                 X = "PUT";
-                 retry = 3;
-                 retry-delay = null;
-                 url = [ "https://example.com/foo" "https://example.com/bar" ];
-                 silent = false;
-                 verbose = true;
-               }
-               => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    }
+    => [
+      "-X" "PUT"
+      "--data" "{\"id\":0}"
+      "--retry" "3"
+      "--url" "https://example.com/foo"
+      "--url" "https://example.com/bar"
+      "--verbose"
+    ]
+    cli.toGNUCommandLineShell {} {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    }
+    => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
     ```
   */
   toGNUCommandLineShell =

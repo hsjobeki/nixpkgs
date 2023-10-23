@@ -30,11 +30,11 @@ assert stdenv.isLinux -> util-linuxMinimal != null;
 #     Possible solution: disable compilation of this example somehow
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
-/*
+/**
   * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests run by Hydra
-      (they should test an already installed package)
-      https://wiki.gnome.org/GnomeGoals/InstalledTests
+  and use them as a separately installed tests run by Hydra
+  (they should test an already installed package)
+  https://wiki.gnome.org/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let

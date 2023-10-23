@@ -819,9 +819,10 @@ in
                   description = lib.mdDoc "Time in seconds to wait for the YubiKey.";
                 };
 
-                /* TODO: Add to the documentation of the current module:
-
-                   Options related to the storing the salt.
+                /**
+                  TODO: Add to the documentation of the current module:
+                  
+                  Options related to the storing the salt.
                 */
                 storage = {
                   device = mkOption {

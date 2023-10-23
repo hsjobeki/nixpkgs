@@ -1,18 +1,28 @@
-/* This file defines the builds that constitute the Nixpkgs.
-   Everything defined here ends up in the Nixpkgs channel.  Individual
-   jobs can be tested by running:
-
-   $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
-
-   e.g.
-
-   $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
+/**
+  This file defines the builds that constitute the Nixpkgs.
+  Everything defined here ends up in the Nixpkgs channel.  Individual
+  jobs can be tested by running:
+  
+  $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
+  
+  e.g.
+  
+  $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
-  # The platforms for which we build Nixpkgs.
+  # The platform doubles for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+  # The platform triples for which we build bootstrap tools.
+, bootstrapConfigs ? [
+    "aarch64-apple-darwin"
+    "aarch64-unknown-linux-gnu"
+    "aarch64-unknown-linux-musl"
+    "i686-unknown-linux-gnu"
+    "x86_64-apple-darwin"
+    "x86_64-unknown-linux-gnu"
+    "x86_64-unknown-linux-musl"
+  ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -26,7 +36,7 @@
       # for no real reason.
       # Remove them for 23.11.
       "nodejs-16.20.2"
-      "openssl-1.1.1v"
+      "openssl-1.1.1w"
     ];
   }; }
 }:
@@ -35,12 +45,10 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; 
 
 let
 
-  systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
-
   supportDarwin = lib.genAttrs [
     "x86_64"
     "aarch64"
-  ] (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
+  ] (arch: builtins.elem "${arch}-darwin" supportedSystems);
 
   nonPackageJobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
@@ -77,6 +85,7 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
               jobs.cachix.x86_64-darwin
+              jobs.darwin.linux-builder.x86_64-darwin
 
               # UI apps
               # jobs.firefox-unwrapped.x86_64-darwin
@@ -88,13 +97,13 @@ let
               jobs.transmission-gtk.x86_64-darwin
 
               # Tests
-              /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
+              /**
+                jobs.tests.cc-wrapper.default.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
+                jobs.tests.stdenv-inputs.x86_64-darwin
+                jobs.tests.macOSSierraShared.x86_64-darwin
+                jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
             ];
         } else null;
@@ -112,6 +121,7 @@ let
               jobs.cargo.x86_64-linux
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
+              jobs.nix.x86_64-linux
               jobs.pandoc.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by contributors to test PRs (by inclusion of the PR template)
@@ -123,23 +133,25 @@ let
               jobs.firefox-unwrapped.x86_64-linux
               jobs.cachix.x86_64-linux
 
-              /*
-              jobs.tests.cc-wrapper.default.x86_64-linux
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
-
-              # broken see issue #40038
-
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-linux
-              jobs.tests.cc-multilib-gcc.x86_64-linux
-              jobs.tests.cc-multilib-clang.x86_64-linux
-              jobs.tests.stdenv-inputs.x86_64-linux
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
+              /**
+                TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
+                
+                jobs.tests.cc-wrapper.default.x86_64-linux
+                jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
+                jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
+                
+                # broken see issue #40038
+                
+                jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-linux
+                jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-linux
+                jobs.tests.cc-multilib-gcc.x86_64-linux
+                jobs.tests.cc-multilib-clang.x86_64-linux
+                jobs.tests.stdenv-inputs.x86_64-linux
+                jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
               */
             ]
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
@@ -150,6 +162,7 @@ let
               jobs.go.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
+              jobs.nix.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -157,39 +170,59 @@ let
               jobs.vim.x86_64-darwin
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
-              /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
+              jobs.darwin.linux-builder.x86_64-darwin
+              /**
+                jobs.tests.cc-wrapper.default.x86_64-darwin
+                jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
+                jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-darwin
+                jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-darwin
+                jobs.tests.stdenv-inputs.x86_64-darwin
+                jobs.tests.macOSSierraShared.x86_64-darwin
+                jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
+              */
+            ]
+            ++ lib.optionals supportDarwin.aarch64 [
+              jobs.stdenv.aarch64-darwin
+              jobs.cargo.aarch64-darwin
+              jobs.cachix.aarch64-darwin
+              jobs.go.aarch64-darwin
+              jobs.python3.aarch64-darwin
+              jobs.nixpkgs-review.aarch64-darwin
+              jobs.nix.aarch64-darwin
+              jobs.nix-info.aarch64-darwin
+              jobs.nix-info-tested.aarch64-darwin
+              jobs.git.aarch64-darwin
+              jobs.mariadb.aarch64-darwin
+              jobs.vim.aarch64-darwin
+              jobs.inkscape.aarch64-darwin
+              jobs.qt5.qtmultimedia.aarch64-darwin
+              /**
+                consider adding tests, as suggested above for x86_64-darwin
               */
             ];
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport (system:
-          if hasSuffix "-linux" system then
+        genAttrs bootstrapConfigs (config:
+          if hasInfix "-linux-" config then
             let
               bootstrap = import ../stdenv/linux/make-bootstrap-tools.nix {
                 pkgs = import ../.. {
-                  localSystem = { inherit system; };
+                  localSystem = { inherit config; };
                 };
               };
             in {
               inherit (bootstrap) dist test;
             }
-          else if hasSuffix "-darwin" system then
+          else if hasSuffix "-darwin" config then
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+                localSystem = { inherit config; };
               };
             in {
               # Lightweight distribution and test
@@ -199,7 +232,7 @@ let
               #inherit (bootstrap.test-pkgs) stdenv;
             }
           else
-            abort "No bootstrap implementation for system: ${system}"
+            abort "No bootstrap implementation for system: ${config}"
         );
     };
 

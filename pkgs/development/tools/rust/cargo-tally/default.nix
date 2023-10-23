@@ -21,7 +21,9 @@ rustPlatform.buildRustPackage rec {
     description = "Graph the number of crates that depend on your crate over time";
     homepage = "https://github.com/dtolnay/cargo-tally";
     changelog = "https://github.com/dtolnay/cargo-tally/releases/tag/${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

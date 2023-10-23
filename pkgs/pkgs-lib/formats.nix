@@ -1,32 +1,31 @@
 { lib, pkgs }:
 rec {
 
-  /*
-
-  Every following entry represents a format for program configuration files
-  used for `settings`-style options (see https://github.com/NixOS/rfcs/pull/42).
-  Each entry should look as follows:
-
+  /**
+    Every following entry represents a format for program configuration files
+    used for `settings`-style options (see https://github.com/NixOS/rfcs/pull/42).
+    Each entry should look as follows:
+    
     <format> = <parameters>: {
-      #        ^^ Parameters for controlling the format
-
-      # The module system type most suitable for representing such a format
-      # The description needs to be overwritten for recursive types
-      type = ...;
-
-      # Utility functions for convenience, or special interactions with the
-      # format (optional)
-      lib = {
-        exampleFunction = ...
-        # Types specific to the format (optional)
-        types = { ... };
-        ...
-      };
-
-      # generate :: Name -> Value -> Path
-      # A function for generating a file with a value of such a type
-      generate = ...;
-
+    #        ^^ Parameters for controlling the format
+    
+    # The module system type most suitable for representing such a format
+    # The description needs to be overwritten for recursive types
+    type = ...;
+    
+    # Utility functions for convenience, or special interactions with the
+    # format (optional)
+    lib = {
+    exampleFunction = ...
+    # Types specific to the format (optional)
+    types = { ... };
+    ...
+    };
+    
+    # generate :: Name -> Value -> Path
+    # A function for generating a file with a value of such a type
+    generate = ...;
+    
     });
   */
 
@@ -188,7 +187,11 @@ rec {
 
     type = with lib.types; let
 
-      iniAtom = (ini args).type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped;
+      iniAtom = (ini args).type/**
+  attrsOf
+*/.functor.wrapped/**
+  attrsOf
+*/.functor.wrapped;
 
     in attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)));
 
@@ -220,30 +223,31 @@ rec {
 
   };
 
-  /* For configurations of Elixir project, like config.exs or runtime.exs
-
+  /**
+    For configurations of Elixir project, like config.exs or runtime.exs
+    
     Most Elixir project are configured using the [Config] Elixir DSL
-
+    
     Since Elixir has more types than Nix, we need a way to map Nix types to
     more than 1 Elixir type. To that end, this format provides its own library,
     and its own set of types.
-
+    
     To be more detailed, a Nix attribute set could correspond in Elixir to a
     [Keyword list] (the more common type), or it could correspond to a [Map].
-
+    
     A Nix string could correspond in Elixir to a [String] (also called
     "binary"), an [Atom], or a list of chars (usually discouraged).
-
+    
     A Nix array could correspond in Elixir to a [List] or a [Tuple].
-
+    
     Some more types exists, like records, regexes, but since they are less used,
     we can leave the `mkRaw` function as an escape hatch.
-
+    
     For more information on how to use this format in modules, please refer to
     the Elixir section of the Nixos documentation.
-
+    
     TODO: special Elixir values doesn't show up nicely in the documentation
-
+    
     [Config]: <https://hexdocs.pm/elixir/Config.html>
     [Keyword list]: <https://hexdocs.pm/elixir/Keyword.html>
     [Map]: <https://hexdocs.pm/elixir/Map.html>
@@ -336,13 +340,15 @@ rec {
         {
           inherit mkRaw;
 
-          /* Fetch an environment variable at runtime, with optional fallback
+          /**
+            Fetch an environment variable at runtime, with optional fallback
           */
           mkGetEnv = { envVariable, fallback ? null }:
             mkRaw "System.get_env(${toElixir envVariable}, ${toElixir fallback})";
 
-          /* Make an Elixir atom.
-
+          /**
+            Make an Elixir atom.
+            
             Note: lowercase atoms still need to be prefixed by ':'
           */
           mkAtom = value: {
@@ -350,25 +356,28 @@ rec {
             _elixirType = "atom";
           };
 
-          /* Make an Elixir tuple out of a list.
+          /**
+            Make an Elixir tuple out of a list.
           */
           mkTuple = value: {
             inherit value;
             _elixirType = "tuple";
           };
 
-          /* Make an Elixir map out of an attribute set.
+          /**
+            Make an Elixir map out of an attribute set.
           */
           mkMap = value: {
             inherit value;
             _elixirType = "map";
           };
 
-          /* Contains Elixir types. Every type it exports can also be replaced
-             by raw Elixir code (i.e. every type is `either type rawElixir`).
-
-             It also reexports standard types, wrapping them so that they can
-             also be raw Elixir.
+          /**
+            Contains Elixir types. Every type it exports can also be replaced
+            by raw Elixir code (i.e. every type is `either type rawElixir`).
+            
+            It also reexports standard types, wrapping them so that they can
+            also be raw Elixir.
           */
           types = with lib.types; let
             isElixirType = type: x: (x._elixirType or "") == type;

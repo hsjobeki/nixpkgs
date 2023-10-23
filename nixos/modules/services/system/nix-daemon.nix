@@ -1,9 +1,9 @@
-/*
+/**
   Declares what makes the nix-daemon work on systemd.
-
+  
   See also
-   - nixos/modules/config/nix.nix: the nix.conf
-   - nixos/modules/config/nix-remote-build.nix: the nix.conf
+  - nixos/modules/config/nix.nix: the nix.conf
+  - nixos/modules/config/nix-remote-build.nix: the nix.conf
 */
 { config, lib, pkgs, ... }:
 
@@ -22,7 +22,7 @@ let
     value = {
       description = "Nix build user ${toString nr}";
 
-      /*
+      /**
         For consistency with the setgid(2), setuid(2), and setgroups(2)
         calls in `libstore/build.cc', don't add any supplementary group
         here except "nixbld".

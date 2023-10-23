@@ -422,7 +422,7 @@ rec {
     );
 
    /**
-    Like builtins.foldl' but for attribute sets.
+    Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
     
@@ -435,44 +435,40 @@ rec {
 
     ```nix
     foldlAttrs
-                (acc: name: value: {
-                  sum = acc.sum + value;
-                  names = acc.names ++ [name];
-                })
-                { sum = 0; names = []; }
-                {
-                  foo = 1;
-                  bar = 10;
-                }
-              ->
-                {
-                  sum = 11;
-                  names = ["bar" "foo"];
-                }
-    
-              foldlAttrs
-                (throw "function not needed")
-                123
-                {};
-              ->
-                123
-    
-              foldlAttrs
-                (_: _: v: v)
-                (throw "initial accumulator not needed")
-                { z = 3; a = 2; };
-              ->
-                3
-    
-              The accumulator doesn't have to be an attrset.
-              It can be as simple as a number or string.
-    
-              foldlAttrs
-                (acc: _: v: acc * 10 + v)
-                1
-                { z = 1; a = 2; };
-              ->
-                121
+      (acc: name: value: {
+        sum = acc.sum + value;
+        names = acc.names ++ [name];
+      })
+      { sum = 0; names = []; }
+      {
+        foo = 1;
+        bar = 10;
+      }
+    ->
+      {
+        sum = 11;
+        names = ["bar" "foo"];
+      }
+    foldlAttrs
+      (throw "function not needed")
+      123
+      {};
+    ->
+      123
+    foldlAttrs
+      (acc: _: _: acc)
+      3
+      { z = throw "value not needed"; a = throw "value not needed"; };
+    ->
+      3
+    The accumulator doesn't have to be an attrset.
+    It can be as simple as a number or string.
+    foldlAttrs
+      (acc: _: v: acc * 10 + v)
+      1
+      { z = 1; a = 2; };
+    ->
+      121
     ```
 
     # Type
@@ -526,11 +522,10 @@ rec {
 
     ```nix
     collect isList { a = { b = ["b"]; }; c = [1]; }
-               => [["b"] [1]]
-    
-               collect (x: x ? outPath)
-                  { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
-               => [{ outPath = "a/"; } { outPath = "b/"; }]
+    => [["b"] [1]]
+    collect (x: x ? outPath)
+       { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+    => [{ outPath = "a/"; } { outPath = "b/"; }]
     ```
 
     # Type
@@ -679,6 +674,41 @@ rec {
     # Attribute set to map over.
     attrs:
     map (name: f name attrs.${name}) (attrNames attrs);
+
+  /**
+    Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
+    Each element of the resulting list is an attribute set with these attributes:
+    - `name` (string): The name of the attribute
+    - `value` (any): The value of the attribute
+    
+    The following is always true:
+    ```nix
+    builtins.listToAttrs (attrsToList attrs) == attrs
+    ```
+    
+    :::{.warning}
+    The opposite is not always true. In general expect that
+    ```nix
+    attrsToList (builtins.listToAttrs list) != list
+    ```
+    
+    This is because the `listToAttrs` removes duplicate names and doesn't preserve the order of the list.
+    :::
+
+    # Example
+
+    ```nix
+    attrsToList { foo = 1; bar = "asdf"; }
+    => [ { name = "bar"; value = "asdf"; } { name = "foo"; value = 1; } ]
+    ```
+
+    # Type
+
+    ```
+    attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+    ```
+  */
+  attrsToList = mapAttrsToList nameValuePair;
 
 
   /**
@@ -991,23 +1021,22 @@ rec {
 
     ```nix
     recursiveUpdateUntil (path: l: r: path == ["foo"]) {
-                 # first attribute set
-                 foo.bar = 1;
-                 foo.baz = 2;
-                 bar = 3;
-               } {
-                 #second attribute set
-                 foo.bar = 1;
-                 foo.quz = 2;
-                 baz = 4;
-               }
-    
-               => {
-                 foo.bar = 1; # 'foo.*' from the second set
-                 foo.quz = 2; #
-                 bar = 3;     # 'bar' from the first set
-                 baz = 4;     # 'baz' from the second set
-               }
+      # first attribute set
+      foo.bar = 1;
+      foo.baz = 2;
+      bar = 3;
+    } {
+      #second attribute set
+      foo.bar = 1;
+      foo.quz = 2;
+      baz = 4;
+    }
+    => {
+      foo.bar = 1; # 'foo.*' from the second set
+      foo.quz = 2; #
+      bar = 3;     # 'bar' from the first set
+      baz = 4;     # 'baz' from the second set
+    }
     ```
 
     # Type
@@ -1045,16 +1074,15 @@ rec {
 
     ```nix
     recursiveUpdate {
-                 boot.loader.grub.enable = true;
-                 boot.loader.grub.device = "/dev/hda";
-               } {
-                 boot.loader.grub.device = "";
-               }
-    
-               returns: {
-                 boot.loader.grub.enable = true;
-                 boot.loader.grub.device = "";
-               }
+      boot.loader.grub.enable = true;
+      boot.loader.grub.device = "/dev/hda";
+    } {
+      boot.loader.grub.device = "";
+    }
+    returns: {
+      boot.loader.grub.enable = true;
+      boot.loader.grub.device = "";
+    }
     ```
 
     # Type

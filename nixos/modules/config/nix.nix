@@ -1,12 +1,12 @@
-/*
+/**
   Manages /etc/nix.conf.
-
+  
   See also
-   - ./nix-channel.nix
-   - ./nix-flakes.nix
-   - ./nix-remote-build.nix
-   - nixos/modules/services/system/nix-daemon.nix
- */
+  - ./nix-channel.nix
+  - ./nix-flakes.nix
+  - ./nix-remote-build.nix
+  - nixos/modules/services/system/nix-daemon.nix
+*/
 { config, lib, pkgs, ... }:
 
 let

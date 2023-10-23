@@ -18,7 +18,9 @@ rustPlatform.buildRustPackage rec {
     description = "A simple linter for Cargo.toml manifests";
     homepage = "https://github.com/fuellabs/cargo-toml-lint";
     changelog = "https://github.com/fuellabs/cargo-toml-lint/releases/tag/v${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [ asl20 /**
+  or
+*/ mit ];
     maintainers = with maintainers; [ mitchmindtree matthiasbeyer ];
   };
 }
