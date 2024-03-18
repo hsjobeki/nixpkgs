@@ -1,0 +1,43 @@
+name: update-doc-pr
+on:
+  workflow_dispatch: # allows manual triggering
+  schedule:
+    - cron: '0 0 * * *' # runs daily at 00:00
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Set environment variables
+        shell: bash
+        run: |
+          echo "GIT_AUTHOR_NAME=github-actions[bot]" >> $GITHUB_ENV
+          echo "GIT_AUTHOR_EMAIL=<github-actions[bot]@users.noreply.github.com>" >> $GITHUB_ENV
+          echo "GIT_COMMITTER_NAME=github-actions[bot]" >> $GITHUB_ENV
+          echo "GIT_COMMITTER_EMAIL=<github-actions[bot]@users.noreply.github.com>" >> $GITHUB_ENV
+      - name: Run migration
+        run: |
+          git config pull.rebase true
+          git fetch https://github.com/NixOS/nixpkgs.git HEAD
+          git reset --hard FETCH_HEAD
+
+          nix run github:nix-community/noogle#codemod .
+
+          git add --all
+          git commit -m "Automated rfc145 migration for comments into doc-comments"
+
+          git push -f origin master:migrate-doc-comments
+        shell: bash
+        env:
+          GIT_AUTHOR_NAME: ${{ env.GIT_AUTHOR_NAME }}
+          GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
+          GIT_COMMITTER_NAME: ${{ env.GIT_COMMITTER_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ env.GIT_COMMITTER_EMAIL }}
+
+
