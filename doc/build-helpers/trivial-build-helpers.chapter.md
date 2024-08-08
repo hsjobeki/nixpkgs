@@ -17,7 +17,9 @@ as the first argument, and allows specifying `stdenv` freely.
 :   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
 
 `runLocal :: Bool`
-:   Whether to set *both* [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
+:   Whether to forces the derivation to be built locally, forgoing the use of substitutors and distributed builds.
+    This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
+    Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
 
    ::: {.note}
    This prevents the use of substitutors, so only set `runLocal` (or use `runCommandLocal`) when certain the user will
@@ -99,11 +101,12 @@ runCommand "my-example" {} ''
 
 ## `runCommandLocal` {#trivial-builder-runCommandLocal}
 
-Variant of `runCommand` that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (<1s execution time). It saves on the network round-trip and can speed up a build.
+`runCommandLocal :: String -> AttrSet -> String -> Derivation`
 
-::: {.note}
-This sets [`allowSubstitutes` to `false`][allowSubstitutes], so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g., just copying some files to a different location or adding symlinks) because there the `system` is usually the same as `builtins.currentSystem`.
-:::
+This variant of [`runCommand`](#trivial-builder-runCommand) sets `runLocal = true`, and also uses `stdenvNoCC`.
+
+See the note on [`runCommandWith`](#trivial-builder-runCommandWith) about `runLocal`.
+
 
 ## Writing text files {#trivial-builder-text-writing}
 
