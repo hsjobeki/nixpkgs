@@ -3,6 +3,63 @@
 Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations.
 Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
 
+
+## `runCommandWith` {#trivial-builder-runCommandWith}
+
+`runCommandWith :: { name, runLocal ? false, stdenv ? pkgs.stdenv, derivationArgs } -> String -> Derivation`
+
+`runCommandWith args buildCommand` produces a derivation which is built using the specified `buildCommand`.
+
+It is a generalized version of `runCommand*`, whose behaviour is controlled via a single attribute set passed
+as the first argument, and allows specifying `stdenv` freely.
+
+`name :: String`
+:   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
+
+`runLocal :: Bool`
+:   Whether to set *both* [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
+
+   ::: {.note}
+   This prevents the use of substitutors, so only set `runLocal` (or use `runCommandLocal`) when certain the user will
+   always have a builder for the `system` of the derivation. This should be true for most trivial use cases
+   (e.g., just copying some files to a different location or adding symlinks) because there the `system`
+   is usually the same as `builtins.currentSystem`.
+   :::
+
+`stdenv :: Derivation`
+:   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
+
+`derivationArgs :: AttrSet`
+:   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
+
+`buildCommand :: String`
+:   Shell commands to run in the derivation builder.
+
+    ::: {.note}
+    You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
+    :::
+
+[allowSubstitutes]: https://nixos.org/nix/manual/#adv-attr-allowSubstitutes
+[preferLocalBuild]: https://nixos.org/nix/manual/#adv-attr-preferLocalBuild
+
+::: {.example #ex-runcommandwith}
+# Invocation of `runCommandWith`
+
+```nix
+runCommandWith {
+  name = "example";
+  derivationArgs.nativeBuildInputs = [ cowsay ];
+} ''
+  cowsay > $out <<EOMOO
+  'runCommandWith' is a bit cumbersome,
+  so we have more-ergonomic wrappers.
+  EOMOO
+''
+```
+
+:::
+
+
 ## `runCommand` {#trivial-builder-runCommand}
 
 `runCommand :: String -> AttrSet -> String -> Derivation`
@@ -58,7 +115,7 @@ This works just like `runCommand`. The only difference is that it also provides 
 Variant of `runCommand` that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (<1s execution time). It saves on the network round-trip and can speed up a build.
 
 ::: {.note}
-This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr-allowSubstitutes), so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g., just copying some files to a different location or adding symlinks) because there the `system` is usually the same as `builtins.currentSystem`.
+This sets [`allowSubstitutes` to `false`][allowSubstitutes], so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g., just copying some files to a different location or adding symlinks) because there the `system` is usually the same as `builtins.currentSystem`.
 :::
 
 ## Writing text files {#trivial-builder-text-writing}
