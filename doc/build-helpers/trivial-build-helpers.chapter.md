@@ -99,6 +99,25 @@ runCommand "my-example" {} ''
 ```
 :::
 
+::: {.note}
+`runCommand name derivationArgs buildCommand` is equivalent to
+```nix
+runCommandWith {
+  inherit name derivationArgs;
+  stdenv = stdenvNoCC;
+} buildCommand
+```
+
+Likewise, `runCommandCC name derivationArgs buildCommand` is equivalent to
+```nix
+runCommandWith {
+  inherit name derivationArgs;
+} buildCommand
+```
+
+:::
+
+
 ## `runCommandLocal` {#trivial-builder-runCommandLocal}
 
 `runCommandLocal :: String -> AttrSet -> String -> Derivation`
