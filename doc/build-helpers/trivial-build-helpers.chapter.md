@@ -78,15 +78,31 @@ runCommandWith {
 
 ## `runCommand` and `runCommandCC` {#trivial-builder-runCommand}
 
-`runCommand :: String -> AttrSet -> String -> Derivation`
-`runCommandCC :: String -> AttrSet -> String -> Derivation`
-
 The function `runCommand` returns a derivation built using the specified command(s), in the `stdenvNoCC` environment.
 
 `runCommandCC` is similar but uses the default compiler environment. To minimize dependencies, `runCommandCC`
 should only be used when the build command needs a C compiler.
 
-The arguments `name`, `derivationArgs`, and `buildCommand` have the same types and meaning as for [`runCommandWith`](#trivial-builder-runCommandWith)
+### Type
+
+```
+runCommand   :: String -> AttrSet -> String -> Derivation
+runCommandCC :: String -> AttrSet -> String -> Derivation
+```
+
+### Input
+
+While the type signature(s) differ from `runCommandWith`, individual arguments with the same name will have the same type and meaning:
+
+`name` (String)
+:   The derivation's name
+
+`derivationArgs` (Attribute set)
+:   Additional parameters passed to [`mkDerivation`]
+
+`buildCommand` (String)
+:   The command(s) run to build the derivation.
+
 
 ::: {.example #ex-runcommand-simple}
 # Invocation of `runCommand`
@@ -128,7 +144,6 @@ runCommandWith {
   inherit name derivationArgs;
 } buildCommand
 ```
-
 :::
 
 
