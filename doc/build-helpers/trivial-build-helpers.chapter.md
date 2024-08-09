@@ -17,12 +17,12 @@ as the first argument, and allows specifying `stdenv` freely.
 :   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
 
 `runLocal :: Bool`
-:   If set to `true` this forces the derivation to be built locally. Remote substitutes and distributed builds, won't be used.
+:   If set to `true` this forces the derivation to be built locally, not using [substitutes] nor remote builds.
     This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
     Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
 
    ::: {.note}
-   This prevents the use of substitutors, so only set `runLocal` (or use `runCommandLocal`) when certain the user will
+   This prevents the use of [substituters][substituter], so only set `runLocal` (or use `runCommandLocal`) when certain the user will
    always have a builder for the `system` of the derivation. This should be true for most trivial use cases
    (e.g., just copying some files to a different location or adding symlinks) because there the `system`
    is usually the same as `builtins.currentSystem`.
@@ -43,6 +43,8 @@ as the first argument, and allows specifying `stdenv` freely.
 
 [allowSubstitutes]: https://nixos.org/nix/manual/#adv-attr-allowSubstitutes
 [preferLocalBuild]: https://nixos.org/nix/manual/#adv-attr-preferLocalBuild
+[substituter]: https://nix.dev/manual/nix/latest/glossary#gloss-substituter
+[substitutes]: https://nix.dev/manual/nix/2.23/glossary#gloss-substitute
 
 ::: {.example #ex-runcommandwith}
 # Invocation of `runCommandWith`
