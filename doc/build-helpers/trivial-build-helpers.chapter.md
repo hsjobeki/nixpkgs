@@ -88,7 +88,7 @@ See the note on [`runCommandWith`] about `runLocal`.
 
 [`runCommandWith`]: #trivial-builder-runCommandWith
 
-### Type
+### Type {#trivial-builder-runCommand-Type}
 
 ```
 runCommand      :: String -> AttrSet -> String -> Derivation
@@ -96,7 +96,7 @@ runCommandCC    :: String -> AttrSet -> String -> Derivation
 runCommandLocal :: String -> AttrSet -> String -> Derivation
 ```
 
-### Input
+### Input {#trivial-builder-runCommand-Input}
 
 While the type signature(s) differ from [`runCommandWith`], individual arguments with the same name will have the same type and meaning:
 
