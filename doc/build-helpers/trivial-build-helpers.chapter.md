@@ -69,10 +69,10 @@ runCommandWith {
 `runCommand :: String -> AttrSet -> String -> Derivation`
 `runCommandCC :: String -> AttrSet -> String -> Derivation`
 
-`runCommand name derivationArgs buildCommand` is a derivation which runs the specified `buildCommand`
-using the `stdenvNoCC` environment.  `runCommandCC` is similar but uses the default compiler environment.
+The function `runCommand` returns a derivation built using the specified command(s), in the `stdenvNoCC` environment.
 
-To minimize dependencies, `runCommandCC` should only be used when `buildCommand` needs a C compiler.
+`runCommandCC` is similar but uses the default compiler environment. To minimize dependencies, `runCommandCC`
+should only be used when the build command needs a C compiler.
 
 The arguments `name`, `derivationArgs`, and `buildCommand` have the same types and meaning as for [`runCommandWith`](#trivial-builder-runCommandWith)
 
