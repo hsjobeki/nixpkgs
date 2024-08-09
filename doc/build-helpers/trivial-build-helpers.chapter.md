@@ -15,10 +15,10 @@ as the first argument, and allows specifying `stdenv` freely.
 
 ```
 runCommandWith :: {
-	name :: name;
-	stdenv? :: Derivation;
-	runLocal? :: Bool;
-	derivationArgs? :: { ... };
+  name :: name;
+  stdenv? :: Derivation;
+  runLocal? :: Bool;
+  derivationArgs? :: { ... };
 } -> String -> Derivation
 ```
 
