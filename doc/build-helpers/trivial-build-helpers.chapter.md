@@ -17,7 +17,7 @@ as the first argument, and allows specifying `stdenv` freely.
 :   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
 
 `runLocal :: Bool`
-:   Whether to forces the derivation to be built locally, forgoing the use of substitutors and distributed builds.
+:   If set to `true` this forces the derivation to be built locally. Remote substitutes and distributed builds, won't be used.
     This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
     Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
 
