@@ -11,7 +11,7 @@ The function `runCommand` returns a derivation built using the specified command
 It is a generalized version of `runCommand*`, whose behaviour is controlled via a single attribute set passed
 as the first argument, and allows specifying `stdenv` freely.
 
-### Type
+### Type {#trivial-builder-runCommandWith-Type}
 
 ```
 runCommandWith :: {
@@ -22,7 +22,7 @@ runCommandWith :: {
 } -> String -> Derivation
 ```
 
-### Inputs
+### Inputs {#trivial-builder-runCommandWith-Inputs}
 
 `name` (String)
 :   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
