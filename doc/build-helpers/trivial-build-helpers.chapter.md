@@ -6,17 +6,28 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 ## `runCommandWith` {#trivial-builder-runCommandWith}
 
-`runCommandWith :: { name, runLocal ? false, stdenv ? pkgs.stdenv, derivationArgs } -> String -> Derivation`
-
-`runCommandWith args buildCommand` produces a derivation which is built using the specified `buildCommand`.
+The function `runCommand` returns a derivation built using the specified command(s), in a specified environment.
 
 It is a generalized version of `runCommand*`, whose behaviour is controlled via a single attribute set passed
 as the first argument, and allows specifying `stdenv` freely.
 
-`name :: String`
+### Type
+
+```
+runCommandWith :: {
+	name :: name;
+	stdenv? :: Derivation;
+	runLocal? :: Bool;
+	derivationArgs? :: { ... };
+} -> String -> Derivation
+```
+
+### Inputs
+
+`name` (String)
 :   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
 
-`runLocal :: Bool`
+`runLocal` (Boolean)
 :   If set to `true` this forces the derivation to be built locally, not using [substitutes] nor remote builds.
     This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
     Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
@@ -28,13 +39,14 @@ as the first argument, and allows specifying `stdenv` freely.
    is usually the same as `builtins.currentSystem`.
    :::
 
-`stdenv :: Derivation`
+`stdenv` (Derivation)
 :   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
 
-`derivationArgs :: AttrSet`
+`derivationArgs` (Attribute set)
 :   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
 
-`buildCommand :: String`
+<!-- TODO(nicoo) how to define that this is `runCommandWith`'s second argument? -->
+`buildCommand` (String)
 :   Shell commands to run in the derivation builder.
 
     ::: {.note}
