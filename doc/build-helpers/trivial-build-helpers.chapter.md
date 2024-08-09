@@ -83,16 +83,22 @@ The function `runCommand` returns a derivation built using the specified command
 `runCommandCC` is similar but uses the default compiler environment. To minimize dependencies, `runCommandCC`
 should only be used when the build command needs a C compiler.
 
+`runCommandLocal` is also similar to `runCommand`, but forces the derivation to be built locally.
+See the note on [`runCommandWith`] about `runLocal`.
+
+[`runCommandWith`]: #trivial-builder-runCommandWith
+
 ### Type
 
 ```
-runCommand   :: String -> AttrSet -> String -> Derivation
-runCommandCC :: String -> AttrSet -> String -> Derivation
+runCommand      :: String -> AttrSet -> String -> Derivation
+runCommandCC    :: String -> AttrSet -> String -> Derivation
+runCommandLocal :: String -> AttrSet -> String -> Derivation
 ```
 
 ### Input
 
-While the type signature(s) differ from `runCommandWith`, individual arguments with the same name will have the same type and meaning:
+While the type signature(s) differ from [`runCommandWith`], individual arguments with the same name will have the same type and meaning:
 
 `name` (String)
 :   The derivation's name
@@ -145,15 +151,6 @@ runCommandWith {
 } buildCommand
 ```
 :::
-
-
-## `runCommandLocal` {#trivial-builder-runCommandLocal}
-
-`runCommandLocal :: String -> AttrSet -> String -> Derivation`
-
-This variant of [`runCommand`](#trivial-builder-runCommand) sets `runLocal = true`, and also uses `stdenvNoCC`.
-
-See the note on [`runCommandWith`](#trivial-builder-runCommandWith) about `runLocal`.
 
 
 ## Writing text files {#trivial-builder-text-writing}
