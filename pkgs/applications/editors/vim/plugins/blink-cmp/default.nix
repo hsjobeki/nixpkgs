@@ -36,6 +36,9 @@ vimUtils.buildVimPlugin {
     mkdir -p target/release
     ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
   '';
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
