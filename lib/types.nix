@@ -582,6 +582,51 @@ rec {
         substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
       };
 
+    annotated = annotation: elemType: mkOptionType rec {
+      inherit (elemType)
+        name
+        description
+        descriptionClass
+        check
+        getSubModules
+        substSubModules
+        emptyValue
+        getSubOptions
+        merge
+        deprecationMessage;
+      # # Function that merge type declarations.
+      # # internal, takes a functor as argument and returns the merged type.
+      # # returning null means the type is not mergeable
+      # typeMerge ? defaultTypeMerge functor
+      # # The deprecation message to display when this type is used by an option
+      # # If null, the type isn't deprecated
+      # deprecationMessage ? null
+      # # The types that occur in the definition of this type. This is used to
+      # # issue deprecation warnings recursively. Can also be used to reuse
+      # # nested types
+      # nestedTypes ? {}
+
+      functor = (fOrig:
+        let
+          isTrivial = fOrig.functor.wrapped == null && fOrig.functor.payload == null;
+          payload = {
+            inherit annotation elemType;
+          };
+          binOp = a: b:
+          let
+            annotation = if a.annotation == b.annotation
+            then a.annotation
+            else null;
+          in {
+            inherit annotation;
+          };
+        in
+          fOrig
+      ) elemType.functor;
+
+      nestedTypes.elemType = elemType;
+    };
+
     attrsOf = elemType: mkOptionType rec {
       name = "attrsOf";
       description = "attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
