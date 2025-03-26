@@ -1721,7 +1721,6 @@ let
         dischargeProperties
         mergeModules
         mergeModules'
-        pushDownProperties
         unifyModuleSyntax
         ;
       collectModules = collectModules null;
@@ -1880,5 +1879,6 @@ private //
     mkRenamedOptionModuleWith
     mkVMOverride
     setDefaultModuleLocation
+    pushDownProperties
     sortProperties;
 }
