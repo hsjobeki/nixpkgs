@@ -984,11 +984,12 @@ let
         else
           let
             getSubModules = opt.options.type.getSubModules or null;
+            staticModules = opt.options.type.getSubModules or null;
             submodules =
               if getSubModules != null then
-                map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
+                map (setDefaultModuleLocation opt._file) staticModules ++ [ res.options ]
               else
-                res.options;
+                [ res.options ];
           in
           opt.options
           // res
@@ -1019,7 +1020,7 @@ let
         inherit loc;
         declarations = [ ];
         declarationPositions = [ ];
-        options = [ ];
+        options = { };
       }
       opts;
 
