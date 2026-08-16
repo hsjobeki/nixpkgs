@@ -117,7 +117,7 @@ stdenvNoCC.mkDerivation (
         --script ./highlightjs/loader.js \
         --script ./anchor.min.js \
         --script ./anchor-use.js \
-        --sidebar-depth 3 \
+        --sidebar-depth 4 \
         --experimental-config ./nav.json \
         --header ${./header.html}\
         --no-navheader \
