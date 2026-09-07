@@ -77,7 +77,7 @@ skawarePackages.buildPackage {
   '';
 
   # Write an execline script.
-  # Documented in ../../../../doc/build-helpers/trivial-build-helpers.chapter.md
+  # Documented in ../../../../doc/build-helpers/trivial-build-helpers.md
   passthru.writeScript =
     name: options: script:
     writeTextFile {

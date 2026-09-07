@@ -80,7 +80,7 @@ let
 
   /**
     See https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules
-    or file://./../doc/module-system/module-system.chapter.md
+    or file://./../doc/module-system/module-system.md
 
     !!! Please think twice before adding to this argument list! The more
     that is specified here instead of in the modules themselves the harder

@@ -147,7 +147,7 @@ makeScopeWithSplicing' {
         ;
 
       # Note: Not in `package.nix` because it references files outside of the package.
-      # See doc/packages/darwin-builder.section.md
+      # See doc/packages/darwin-builder.md
       linux-builder = lib.makeOverridable (
         { modules }:
         let
@@ -182,7 +182,7 @@ makeScopeWithSplicing' {
 
       # Like `linux-builder`, but runs the guest on Apple's Virtualization.framework
       # via `vzvm`, translating x86_64-linux builds with Rosetta instead of emulating
-      # them. See doc/packages/darwin-builder.section.md
+      # them. See doc/packages/darwin-builder.md
       linux-builder-vz = lib.makeOverridable (
         { modules }:
         let

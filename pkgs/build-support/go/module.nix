@@ -104,7 +104,7 @@ lib.extendMkDerivation {
             # The following inheritance behavior is not trivial to expect, and some may
             # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
             # out in the wild. In anycase, it's documented in:
-            # doc/languages-frameworks/go.section.md.
+            # doc/languages-frameworks/go.md.
             prePatch = finalAttrs.prePatch or "";
             patches = finalAttrs.patches or [ ];
             patchFlags = finalAttrs.patchFlags or [ ];

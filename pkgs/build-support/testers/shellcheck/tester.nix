@@ -6,7 +6,7 @@
 }:
 
 # testers.shellcheck function
-# Docs: doc/build-helpers/testers.chapter.md
+# Docs: doc/build-helpers/testers.md
 # Tests: ./tests.nix
 {
   name ? null,

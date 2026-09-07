@@ -16,7 +16,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/agda.section.md
+              - doc/languages-frameworks/agda.md
               - nixos/tests/agda.nix
               - pkgs/build-support/agda/**/*
               - pkgs/development/libraries/agda/**/*
@@ -85,7 +85,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/dotnet.section.md
+              - doc/languages-frameworks/dotnet.md
               - maintainers/scripts/update-dotnet-lockfiles.nix
               - pkgs/build-support/dotnet/**/*
               - pkgs/development/compilers/dotnet/**/*
@@ -116,7 +116,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/beam.section.md
+              - doc/languages-frameworks/beam.md
               - pkgs/development/beam-modules/**/*
               - pkgs/development/interpreters/elixir/**/*
               - pkgs/development/interpreters/erlang/**/*
@@ -156,7 +156,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/gnome.section.md
+              - doc/languages-frameworks/gnome.md
               - nixos/modules/services/desktops/gnome/**/*
               - nixos/modules/services/desktop-managers/gnome.nix
               - nixos/tests/gnome-xorg.nix
@@ -167,7 +167,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/go.section.md
+              - doc/languages-frameworks/go.md
               - pkgs/build-support/go/**/*
               - pkgs/development/compilers/go/**/*
 
@@ -181,7 +181,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/haskell.section.md
+              - doc/languages-frameworks/haskell.md
               - maintainers/scripts/haskell/**/*
               - pkgs/development/compilers/ghc/**/*
               - pkgs/development/haskell-modules/**/*
@@ -204,14 +204,14 @@
               - pkgs/development/compilers/temurin-bin/**/*
               - pkgs/development/compilers/zulu/**/*
               # Documentation
-              - doc/languages-frameworks/java.section.md
+              - doc/languages-frameworks/java.md
               # Gradle
-              - doc/languages-frameworks/gradle.section.md
+              - doc/languages-frameworks/gradle.md
               - pkgs/development/tools/build-managers/gradle/**/*
               - pkgs/by-name/gr/gradle-completion/**/*
               # Maven
               - pkgs/by-name/ma/maven/**/*
-              - doc/languages-frameworks/maven.section.md
+              - doc/languages-frameworks/maven.md
               # Ant
               - pkgs/by-name/an/ant/**/*
               # javaPackages attrset
@@ -236,7 +236,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/julia.section.md
+              - doc/languages-frameworks/julia.md
               - pkgs/development/compilers/julia/**/*
               - pkgs/development/julia-modules/**/*
 
@@ -263,7 +263,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/packages/linux.section.md
+              - doc/packages/linux.md
               - lib/kernel.nix
               - nixos/doc/manual/configuration/linux-kernel.chapter.md
               - nixos/modules/system/boot/kernel.nix
@@ -344,7 +344,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/nim.section.md
+              - doc/languages-frameworks/nim.md
               - pkgs/build-support/build-nim-package.nix
               - pkgs/build-support/build-nim-sbom.nix
               - pkgs/by-name/ni/nim*
@@ -370,7 +370,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/javascript.section.md
+              - doc/languages-frameworks/javascript.md
               - pkgs/build-support/node/**/*
               - pkgs/development/node-packages/**/*
               - pkgs/development/tools/yarn/*
@@ -391,7 +391,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/ocaml.section.md
+              - doc/languages-frameworks/ocaml.md
               - pkgs/development/compilers/ocaml/**/*
               - pkgs/development/compilers/reason/**/*
               - pkgs/development/ocaml-modules/**/*
@@ -412,7 +412,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/php.section.md
+              - doc/languages-frameworks/php.md
               - nixos/tests/php/**/*
               - pkgs/build-support/php/**/*
               - pkgs/development/interpreters/php/**/*
@@ -431,7 +431,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/python.section.md
+              - doc/languages-frameworks/python.md
               - pkgs/development/interpreters/python/**/*
               - pkgs/development/python-modules/**/*
               - pkgs/top-level/python-packages.nix
@@ -440,7 +440,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/qt.section.md
+              - doc/languages-frameworks/qt.md
               - nixos/modules/services/desktop-managers/plasma6.nix
               - nixos/tests/plasma6.nix
               - pkgs/kde/**/*
@@ -474,7 +474,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/ruby.section.md
+              - doc/languages-frameworks/ruby.md
               - pkgs/development/interpreters/ruby/**/*
               - pkgs/development/ruby-modules/**/*
               - pkgs/top-level/ruby-packages.nix
@@ -483,7 +483,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/rust.section.md
+              - doc/languages-frameworks/rust.md
               - pkgs/build-support/rust/**/*
               - pkgs/development/compilers/rust/**/*
 
@@ -510,7 +510,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/tcl.section.md
+              - doc/languages-frameworks/tcl.md
               - pkgs/development/interpreters/tcl/*
               - pkgs/development/tcl-modules/**/*
               - pkgs/top-level/tcl-packages.nix
@@ -541,7 +541,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/texlive.section.md
+              - doc/languages-frameworks/texlive.md
               - pkgs/test/texlive/**
               - pkgs/tools/typesetting/tex/**/*
 
@@ -549,7 +549,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/packages/python-tree-sitter.section.md
+              - doc/packages/python-tree-sitter.md
               - pkgs/applications/editors/emacs/elisp-packages/manual-packages/tree-sitter-langs/**/*
               - pkgs/applications/editors/emacs/elisp-packages/manual-packages/treesit-grammars/**/*
               - pkgs/applications/editors/vim/plugins/nvim-treesitter/**/*
@@ -567,7 +567,7 @@
   - any:
       - changed-files:
           - any-glob-to-any-file:
-              - doc/languages-frameworks/vim.section.md
+              - doc/languages-frameworks/vim.md
               - pkgs/applications/editors/vim/**/*
               - pkgs/applications/editors/vim/plugins/**/*
               - nixos/modules/programs/neovim.nix
@@ -621,7 +621,7 @@
       - changed-files:
           - any-glob-to-any-file:
               - pkgs/development/compilers/zig/**/*
-              - doc/hooks/zig.section.md
+              - doc/hooks/zig.md
 
 "8.has: changelog":
   - any:

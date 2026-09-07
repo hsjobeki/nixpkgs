@@ -999,7 +999,7 @@ rec {
 
   buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
-  # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
+  # Arguments are documented in ../../../doc/build-helpers/images/dockertools.md
   streamLayeredImage = lib.makeOverridable (
     {
       name,
@@ -1259,7 +1259,7 @@ rec {
 
   # This function streams a docker image that behaves like a nix-shell for a derivation.
   #
-  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Docs: doc/build-helpers/images/dockertools.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   streamNixShellImage =
     {
@@ -1428,7 +1428,7 @@ rec {
 
   # Wrapper around `streamNixShellImage` to build an image from the result.
   #
-  # Docs: doc/build-helpers/images/dockertools.section.md
+  # Docs: doc/build-helpers/images/dockertools.md
   # Tests: nixos/tests/docker-tools-nix-shell.nix
   buildNixShellImage =
     {

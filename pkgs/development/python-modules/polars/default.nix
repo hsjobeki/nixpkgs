@@ -89,7 +89,7 @@ buildPythonPackage (finalAttrs: {
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
 
-    # https://github.com/NixOS/nixpkgs/blob/5c38beb516f8da3a823d94b746dd3bf3c6b9bbd7/doc/languages-frameworks/rust.section.md#using-community-maintained-rust-toolchains-using-community-maintained-rust-toolchains
+    # https://github.com/NixOS/nixpkgs/blob/5c38beb516f8da3a823d94b746dd3bf3c6b9bbd7/doc/languages-frameworks/rust.md#using-community-maintained-rust-toolchains-using-community-maintained-rust-toolchains
     # https://discourse.nixos.org/t/nixpkgs-rustplatform-and-nightly/22870
     RUSTC_BOOTSTRAP = true;
 

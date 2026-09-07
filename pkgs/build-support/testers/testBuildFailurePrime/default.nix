@@ -4,7 +4,7 @@
   testers,
 }:
 # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
-# or doc/build-helpers/testers.chapter.md
+# or doc/build-helpers/testers.md
 lib.makeOverridable (
   {
     drv,

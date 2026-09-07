@@ -27,7 +27,7 @@ let
   # We must use an instance of Nixpkgs where the CUDA package set we're building is the default; if we do not, members
   # of the versioned, non-default package sets may rely on (transitively) members of the default, unversioned CUDA
   # package set.
-  # See `Using cudaPackages.pkgs` in doc/languages-frameworks/cuda.section.md for more information.
+  # See `Using cudaPackages.pkgs` in doc/languages-frameworks/cuda.md for more information.
   pkgs' =
     let
       cudaPackagesUnversionedName = "cudaPackages";

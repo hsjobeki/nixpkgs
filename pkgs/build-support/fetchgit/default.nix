@@ -56,7 +56,7 @@ lib.makeOverridable (
       finalAttrs:
       lib.fetchers.withNormalizedHash { } (
         # NOTE Please document parameter additions or changes in
-        #   ../../../doc/build-helpers/fetchers.chapter.md
+        #   ../../../doc/build-helpers/fetchers.md
         {
           url,
           tag ? null,

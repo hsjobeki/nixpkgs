@@ -257,7 +257,7 @@ in
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
-        # which is at ../../../doc/multiple-output.chapter.md
+        # which is at doc/stdenv/multiple-output.md
       };
 
       man.enable = mkOption {

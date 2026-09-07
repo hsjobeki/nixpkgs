@@ -36,7 +36,7 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  # https://github.com/NixOS/nixpkgs/blob/1e1947e8b7962c914b725e8b821e311229e632ae/doc/packages/fuse.section.md?plain=1#L10
+  # https://github.com/NixOS/nixpkgs/blob/1e1947e8b7962c914b725e8b821e311229e632ae/doc/packages/fuse.md?plain=1#L10
   pythonImportsCheck = lib.optionals stdenv.hostPlatform.isLinux [ "mfusepy" ];
 
   meta = {

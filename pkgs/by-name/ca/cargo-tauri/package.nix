@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   passthru = {
-    # See ./doc/hooks/tauri.section.md
+    # See /doc/hooks/tauri.md
     hook = callPackage ./hook.nix { cargo-tauri = finalAttrs.finalPackage; };
     gst-plugin = callPackage ./gst-plugin.nix { };
 

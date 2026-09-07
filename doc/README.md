@@ -217,6 +217,18 @@ You, as the writer of documentation, are still in charge of its content.
 
 **For prose style, see the [documentation styleguide](./styleguide.md).**
 
+### Filenames
+
+Some filenames carry a suffix for example:
+
+`go.section.md` (suffixes: `part`/`chapter`/`section`)
+
+The suffix is sometimes needed if the file is included via a legacy-`{=include=}` statement.
+
+If the file is included via `nav.json` the suffix becomes meaningless and can be dropped.
+
+The goal is to drop all suffixes and move away from legacy-`{=include=}`
+
 ### Document structure
 
 Organize each chapter as guide sections first, then a single `## Reference` section.

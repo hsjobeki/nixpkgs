@@ -31,7 +31,7 @@ in
     inherit sha256;
   },
   # Extra environment variables to set during the build.
-  # See: `../../../doc/languages-frameworks/haskell.section.md`
+  # See: `../../../doc/languages-frameworks/haskell.md`
   env ? { },
   buildDepends ? [ ],
   setupHaskellDepends ? [ ],

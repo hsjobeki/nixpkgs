@@ -6,7 +6,7 @@ let
   inherit (builtins) typeOf;
 in
 rec {
-  # Docs: doc/build-helpers/dev-shell-tools.chapter.md
+  # Docs: doc/build-helpers/dev-shell-tools.md
   # Tests: ./tests/default.nix
   # This function closely mirrors what this Nix code does:
   # https://github.com/NixOS/nix/blob/2.8.0/src/libexpr/primops.cc#L1102
@@ -23,7 +23,7 @@ rec {
     else
       toString value;
 
-  # Docs: doc/build-helpers/dev-shell-tools.chapter.md
+  # Docs: doc/build-helpers/dev-shell-tools.md
   # Tests: ./tests/default.nix
   # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L992-L1004
   unstructuredDerivationInputEnv =
@@ -47,7 +47,7 @@ rec {
         ]
       );
 
-  # Docs: doc/build-helpers/dev-shell-tools.chapter.md
+  # Docs: doc/build-helpers/dev-shell-tools.md
   # Tests: ./tests/default.nix
   derivationOutputEnv =
     { outputList, outputMap }:

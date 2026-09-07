@@ -3,7 +3,7 @@
 > [!NOTE]
 > This document is meant to help CUDA maintainers understand the structure of
 > the CUDA packages in Nixpkgs. It is not meant to be a user-facing document.
-> For a user-facing document, see [the CUDA section of the manual](../../../doc/languages-frameworks/cuda.section.md).
+> For a user-facing document, see [the CUDA section of the manual](../../../doc/languages-frameworks/cuda.md).
 
 The files in this directory are added (in some way) to the `cudaPackages`
 package set by [cuda-packages.nix](../../top-level/cuda-packages.nix).

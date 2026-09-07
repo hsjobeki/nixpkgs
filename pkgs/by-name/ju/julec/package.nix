@@ -98,7 +98,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # see doc/hooks/julec.section.md
+    # see doc/hooks/julec.md
     hook = callPackage ./hook.nix { julec = finalAttrs.finalPackage; };
     tests.hello-jule = callPackage ./test { julec = finalAttrs.finalPackage; };
   };

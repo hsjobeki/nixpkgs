@@ -22,7 +22,7 @@ in
 recurseIntoAttrs {
   # NOTE: This particular test is used in the docs:
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   docs-test-function-add-cowbell = testEqualArrayOrMap {
     name = "test-function-add-cowbell";
     valuesArray = [

@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
 
   # wrapQTAppsHook seems to not find the python script.
   # Thus the manual preFixup step
-  # https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/qt.section.md
+  # https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/qt.md
   dontWrapQtApps = true;
   preFixup = ''
     wrapQtApp "$out/bin/pluto"

@@ -4,7 +4,7 @@
   stdenvNoCC,
 }:
 # See https://nixos.org/manual/nixpkgs/unstable/#tester-shfmt
-# or doc/build-helpers/testers.chapter.md
+# or doc/build-helpers/testers.md
 {
   name,
   src,

@@ -482,7 +482,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   # Running tests as "install check" to work around SIP issue on macOS:
   # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
-  # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
+  # Also see <nixpkgs>/doc/stdenv/platform-notes.md
   doCheck = false;
   doInstallCheck =
     # Tests currently can't be run on darwin, because of a Nix bug:

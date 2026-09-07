@@ -69,7 +69,7 @@ let
     let
       # buildEnv wraps php to provide additional extensions and
       # configuration. Its usage is documented in
-      # doc/languages-frameworks/php.section.md.
+      # doc/languages-frameworks/php.md.
       #
       # Create a buildEnv with earlier overridden values and
       # extensions functions in its closure. This is necessary for

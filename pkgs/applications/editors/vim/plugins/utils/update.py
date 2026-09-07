@@ -12,9 +12,9 @@
 # If you see `HTTP Error 429: too many requests` errors while running this
 # script, refer to:
 #
-# https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/vim.section.md#updating-plugins-in-nixpkgs-updating-plugins-in-nixpkgs
+# https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/vim.md#updating-plugins-in-nixpkgs-updating-plugins-in-nixpkgs
 #
-# (or the equivalent file /doc/languages-frameworks/vim.section.md
+# (or the equivalent file /doc/languages-frameworks/vim.md
 # from Nixpkgs master tree).
 #
 
@@ -22,9 +22,9 @@ import inspect
 import json
 import logging
 import os
+import subprocess
 import textwrap
 from pathlib import Path
-import subprocess
 from typing import List, Tuple
 
 log = logging.getLogger("vim-updater")

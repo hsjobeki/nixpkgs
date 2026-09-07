@@ -100,7 +100,7 @@ in
   sourceRoot ? null,
   setSourceRoot ? null,
   # Extra environment variables to set during the build.
-  # See: `../../../doc/languages-frameworks/haskell.section.md`
+  # See: `../../../doc/languages-frameworks/haskell.md`
   env ? { },
   buildDepends ? [ ],
   setupHaskellDepends ? [ ],
@@ -234,7 +234,7 @@ in
   # Haskell binaries from having erroneous dependencies on GHC.
   #
   # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
-  # or its source doc/languages-frameworks/haskell.section.md
+  # or its source doc/languages-frameworks/haskell.md
   disallowGhcReference ? false,
   # By default we convert the `.cabal` file to Unix line endings to work around
   # Hackage converting them to DOS line endings when revised, see

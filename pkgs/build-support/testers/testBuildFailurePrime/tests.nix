@@ -12,7 +12,7 @@ let
   final = {
     # NOTE: This example is used in the docs.
     # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
-    # or doc/build-helpers/testers.chapter.md
+    # or doc/build-helpers/testers.md
     doc-example = testers.testBuildFailure' {
       drv = runCommand "doc-example" { } ''
         echo ok-ish >"$out"

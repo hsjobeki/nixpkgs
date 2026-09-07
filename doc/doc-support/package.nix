@@ -80,7 +80,7 @@ stdenvNoCC.mkDerivation (
 
     postPatch = ''
       ln -s ${optionsJSON}/share/doc/nixos/options.json ./config-options.json
-      ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.section.md
+      ln -s ${treefmt.functionsDoc.markdown} ./packages/treefmt-functions.md
       ln -s ${treefmt.optionsDoc.optionsJSON}/share/doc/nixos/options.json ./treefmt-options.json
       ln -s ${docs.generic.meta-maintainers.optionsJSON}/share/doc/nixos/options.json ./options-modules-generic-meta-maintainers.json
     '';
@@ -88,7 +88,7 @@ stdenvNoCC.mkDerivation (
     buildPhase = ''
       runHook preBuild
 
-      substituteInPlace ./languages-frameworks/python.section.md \
+      substituteInPlace ./languages-frameworks/python.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
       cat ./functions/library.md.in ${lib-docs}/index.md > ./functions/library.md

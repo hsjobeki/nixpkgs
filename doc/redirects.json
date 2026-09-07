@@ -1001,15 +1001,15 @@
   ],
   "typst": [
     "index.html#typst",
-    "doc/languages-frameworks/typst.section.md#typst"
+    "doc/languages-frameworks/typst.md#typst"
   ],
   "typst-custom-environment": [
     "index.html#typst-custom-environment",
-    "doc/languages-frameworks/typst.section.md#typst-custom-environment"
+    "doc/languages-frameworks/typst.md#typst-custom-environment"
   ],
   "typst-custom-packages": [
     "index.html#typst-custom-packages",
-    "doc/languages-frameworks/typst.section.md#typst-custom-packages"
+    "doc/languages-frameworks/typst.md#typst-custom-packages"
   ],
   "typst-handling-outdated-package-hashes": [
     "index.html#typst-handling-outdated-package-hashes"

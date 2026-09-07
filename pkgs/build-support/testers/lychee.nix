@@ -30,7 +30,7 @@ let
     '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   lycheeLinkCheck =
     {
       site,

@@ -103,7 +103,7 @@ self: super: {
   # that target system. For example, `pkgsForCudaArch.sm_90a.python3Packages.torch` refers to PyTorch built for the
   # Hopper architecture, leveraging architecture-specific features.
   # NOTE: Not every package set is supported on every architecture!
-  # See `Using pkgsForCudaArch` in doc/languages-frameworks/cuda.section.md for more information.
+  # See `Using pkgsForCudaArch` in doc/languages-frameworks/cuda.md for more information.
   pkgsForCudaArch = lib.listToAttrs (
     lib.map (cudaCapability: {
       name = self._cuda.lib.mkRealArchitecture cudaCapability;

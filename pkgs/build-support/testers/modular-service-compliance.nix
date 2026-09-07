@@ -9,7 +9,7 @@
 
 /**
   See https://nixos.org/manual/nixpkgs/unstable/#tester-modularServiceCompliance
-  or doc/build-helpers/testers.chapter.md
+  or doc/build-helpers/testers.md
 */
 {
   evalConfig,
@@ -367,5 +367,5 @@ in
     '';
   };
 
-  # See also the manual compliance items in doc/build-helpers/testers.chapter.md.
+  # See also the manual compliance items in doc/build-helpers/testers.md.
 }

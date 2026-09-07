@@ -13,14 +13,14 @@
   replaceVars,
   testers,
 }:
-# Documentation is in doc/build-helpers/testers.chapter.md
+# Documentation is in doc/build-helpers/testers.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   inherit (callPackage ./lychee.nix { }) lycheeLinkCheck;
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   testBuildFailure =
     drv:
     drv.overrideAttrs (orig: {
@@ -42,15 +42,15 @@
     });
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   testBuildFailure' = callPackage ./testBuildFailurePrime { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   testEqualContents =
     {
       assertion,
@@ -93,11 +93,11 @@
       '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   testEqualArrayOrMap = callPackage ./testEqualArrayOrMap { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   testVersion =
     {
       package,
@@ -128,7 +128,7 @@
       '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   invalidateFetcherByDrvHash =
     f: args:
     let
@@ -192,7 +192,7 @@
   );
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   runNixOSTest =
     let
       nixos = import ../../../nixos/lib {
@@ -210,7 +210,7 @@
     };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
-  # or doc/build-helpers/testers.chapter.md
+  # or doc/build-helpers/testers.md
   nixosTest =
     let
       /*

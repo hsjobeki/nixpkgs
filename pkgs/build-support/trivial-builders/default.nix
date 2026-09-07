@@ -24,7 +24,7 @@ in
 
 rec {
 
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommand
   runCommand =
     name: env:
@@ -34,7 +34,7 @@ rec {
       inherit name;
       derivationArgs = env;
     };
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandLocal
   runCommandLocal =
     name: env:
@@ -44,7 +44,7 @@ rec {
       inherit name;
       derivationArgs = env;
     };
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandCC
   runCommandCC =
     name: env:
@@ -57,7 +57,7 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandWith
   runCommandWith =
     let
@@ -97,7 +97,7 @@ rec {
       // removeAttrs derivationArgs removedNames
     );
 
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeTextFile
   writeTextFile = lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
@@ -186,7 +186,7 @@ rec {
     inheritFunctionArgs = false;
   };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeText =
     name: text:
@@ -199,7 +199,7 @@ rec {
       writeTextFile
       { inherit name text; };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeTextDir =
     path: text:
@@ -209,7 +209,7 @@ rec {
       destination = "/${path}";
     };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScript =
     name: text:
@@ -218,7 +218,7 @@ rec {
       executable = true;
     };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeScriptBin =
     name: text:
@@ -229,7 +229,7 @@ rec {
       meta.mainProgram = name;
     };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScript =
     name: text:
@@ -245,7 +245,7 @@ rec {
       '';
     };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-text-writing
   writeShellScriptBin =
     name: text:
@@ -263,7 +263,7 @@ rec {
       meta.mainProgram = name;
     };
 
-  # See doc/build-helpers/trivial-build-helpers.chapter.md
+  # See doc/build-helpers/trivial-build-helpers.md
   # or https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeShellApplication
   writeShellApplication =
     {
@@ -371,7 +371,7 @@ rec {
         $CC -x c code.c -o "$n"
       '';
 
-  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /**
@@ -435,7 +435,7 @@ rec {
         eval "$checkPhase"
       '';
 
-  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /**
@@ -451,7 +451,7 @@ rec {
   */
   concatText = name: files: concatTextFile { inherit name files; };
 
-  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
+  # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
   /**
@@ -473,7 +473,7 @@ rec {
     };
 
   # TODO: Deduplicate this documentation.
-  #       More docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  #       More docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-symlinkJoin
   /**
     Create a forest of symlinks to the files in `paths`.
@@ -756,7 +756,7 @@ rec {
       ln -s ${lib.getBin drv}/bin $out/bin
     '';
 
-  # Docs in doc/build-helpers/special/makesetuphook.section.md
+  # Docs in doc/build-helpers/special/makesetuphook.md
   # See https://nixos.org/manual/nixpkgs/unstable/#sec-pkgs.makeSetupHook
   makeSetupHook =
     {
@@ -807,7 +807,7 @@ rec {
         ''
       );
 
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
   writeClosure =
     paths:
@@ -822,7 +822,7 @@ rec {
         jq -r ".graph | map(.path) | sort | .[]" "$NIX_ATTRS_JSON_FILE" > "$out"
       '';
 
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # Docs in doc/build-helpers/trivial-build-helpers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeDirectReferencesToFile
   writeDirectReferencesToFile =
     path:
@@ -933,7 +933,7 @@ rec {
     else
       writeDirectReferencesToFile (writeText "string-file" string);
 
-  # Docs in doc/build-helpers/fetchers.chapter.md
+  # Docs in doc/build-helpers/fetchers.md
   # See https://nixos.org/manual/nixpkgs/unstable/#requirefile
   requireFile = lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
