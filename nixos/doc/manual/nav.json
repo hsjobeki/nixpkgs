@@ -185,9 +185,7 @@
         {
           "file": "configuration/subversion.chapter.md"
         },
-        {
-          "file": "configuration/@MODULE_CHAPTERS@"
-        },
+        "@MODULE_CHAPTERS@",
         {
           "label": "Profiles",
           "id": "ch-profiles",
