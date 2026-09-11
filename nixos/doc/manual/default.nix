@@ -203,6 +203,7 @@ rec {
           --sidebar-depth 2 \
           --header ${./header.html}\
           --no-navheader \
+          --experimental-config ${./nav.json} \
           ./manual.md \
           $dst/${common.indexPath}
 
