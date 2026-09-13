@@ -95,3 +95,4 @@ async function checkDocsStyleguide({ github, context, core, repoPath, dry }) {
 }
 
 module.exports = checkDocsStyleguide
+// CI experiment: does workflow_call accept an unset required secret?
