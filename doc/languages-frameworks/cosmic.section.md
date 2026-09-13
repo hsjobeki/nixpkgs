@@ -17,7 +17,7 @@ and wrapping applications based on libcosmic. It handles many common requirement
 - Managing Vergen environment variables for build-time information
 - Setting up Rust linker flags for specific libraries
 
-To use the hook, simply add it to your package's `nativeBuildInputs`:
+To use the hook, add it to your package's `nativeBuildInputs`:
 
 ```nix
 {
