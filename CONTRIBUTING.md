@@ -963,3 +963,5 @@ Repeated violations are grounds for further moderation action.
 ## Credits
 
 This policy takes inspiration from similar policies in [LLVM](https://llvm.org/docs/AIToolPolicy.html), [Mesa](https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.0-rc1/docs/submittingpatches.rst?ref_type=tags), [Fedora](https://docs.fedoraproject.org/en-US/council/policy/ai-contribution-policy/), and the [Linux kernel](https://docs.kernel.org/7.0/process/coding-assistants.html), along with [a proposal by the author of Anubis](https://xeiaso.net/notes/2025/assisted-by-footer/).
+
+<!-- CI test: no doc changes in this PR. -->
